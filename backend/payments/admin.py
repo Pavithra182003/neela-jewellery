@@ -1,0 +1,23 @@
+from django.contrib import admin
+
+from .models import Payment
+
+
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = (
+        "order",
+        "amount",
+        "currency",
+        "method",
+        "status",
+        "created_at",
+    )
+    list_filter = ("status", "method", "currency")
+    search_fields = (
+        "order__order_number",
+        "razorpay_order_id",
+        "razorpay_payment_id",
+    )
+    autocomplete_fields = ("order",)
+    readonly_fields = ("created_at", "updated_at")
