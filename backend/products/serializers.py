@@ -14,7 +14,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
 class ProductListSerializer(serializers.ModelSerializer):
     """Lightweight shape used for grid/listing pages (shop, search,
     related products, wishlist, cart) — no full description/gallery."""
-
+    product_id = serializers.CharField(read_only=True)
     category = serializers.CharField(source="category.name", read_only=True)
     category_slug = serializers.CharField(source="category.slug", read_only=True)
     primary_image = serializers.SerializerMethodField()
@@ -29,6 +29,7 @@ class ProductListSerializer(serializers.ModelSerializer):
         model = Product
         fields = (
             "id",
+            "product_id",
             "name",
             "slug",
             "sku",
@@ -77,7 +78,7 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     """Full representation for the product details page."""
-
+    product_id = serializers.CharField(read_only=True)
     category = SubcategorySerializer(read_only=True)
     images = ProductImageSerializer(many=True, read_only=True)
     current_price = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
@@ -90,6 +91,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         model = Product
         fields = (
             "id",
+            "product_id",
             "name",
             "slug",
             "sku",

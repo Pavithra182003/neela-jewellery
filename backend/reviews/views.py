@@ -10,7 +10,7 @@ from common.pagination import StandardResultsPagination
 from common.permissions import IsOwnerOrAdmin
 from notifications.services import notify_review_approved
 from products.models import Product
-
+from orders.models import Order
 from .models import Review
 from .serializers import AdminReviewSerializer, ReviewModerationSerializer, ReviewSerializer, ReviewWriteSerializer
 from .services import has_purchased
@@ -58,7 +58,6 @@ class ProductReviewListCreateView(generics.ListCreateAPIView):
             raise ValidationError({"detail": "You've already reviewed this product."})
 
         return Response(ReviewSerializer(review).data, status=status.HTTP_201_CREATED)
-
 
 class ReviewDetailView(generics.RetrieveUpdateDestroyAPIView):
     """

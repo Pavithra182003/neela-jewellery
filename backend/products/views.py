@@ -112,10 +112,13 @@ class ProductViewSet(viewsets.ModelViewSet):
         """
         threshold = int(request.query_params.get("threshold", 5))
         queryset = (
-            Product.objects.filter(stock_quantity__gt=0, stock_quantity__lte=threshold, is_active=True)
-            .select_related("category")
-            .order_by("stock_quantity")
-        )
+                    Product.objects.filter(
+                        stock_quantity__lte=threshold,
+                        is_active=True,
+                    )
+                    .select_related("category")
+                    .order_by("stock_quantity")
+                )
         serializer = ProductListSerializer(queryset, many=True, context={"request": request})
         return Response(serializer.data)
 

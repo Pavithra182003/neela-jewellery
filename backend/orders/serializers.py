@@ -8,18 +8,23 @@ from .models import Order, OrderItem
 class OrderItemSerializer(serializers.ModelSerializer):
     subtotal = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
 
+    product_slug = serializers.CharField(
+        source="product.slug",
+        read_only=True,
+    )
+
     class Meta:
         model = OrderItem
         fields = (
             "id",
             "product",
+            "product_slug",     
             "product_name",
             "product_image_url",
             "price",
             "quantity",
             "subtotal",
         )
-
 
 class OrderAddressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,15 +43,19 @@ class OrderAddressSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    """Lightweight shape for the order-history list page."""
-
+    order_id = serializers.CharField(read_only=True)
     total_items = serializers.IntegerField(read_only=True)
+    product_name = serializers.SerializerMethodField()
+    customer_name = serializers.CharField(source="shipping_address.full_name", read_only=True)
 
     class Meta:
         model = Order
         fields = (
             "id",
+            "order_id",
             "order_number",
+            "customer_name",
+            "product_name",
             "status",
             "payment_status",
             "payment_method",
@@ -55,10 +64,14 @@ class OrderSerializer(serializers.ModelSerializer):
             "placed_at",
         )
 
-
+    def get_product_name(self, obj):
+        item = obj.items.first()
+        if item:
+            return item.product_name
+        return "-"
 class OrderDetailSerializer(serializers.ModelSerializer):
     """Full order representation for the order-details / confirmation page."""
-
+    order_id = serializers.CharField(read_only=True)
     items = OrderItemSerializer(many=True, read_only=True)
     shipping_address = OrderAddressSerializer(read_only=True)
     coupon_code = serializers.CharField(source="coupon.code", read_only=True, default=None)
@@ -68,6 +81,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         model = Order
         fields = (
             "id",
+            "order_id",
             "order_number",
             "status",
             "payment_status",

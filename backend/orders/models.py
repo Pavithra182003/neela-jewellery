@@ -11,7 +11,7 @@ from users.models import Address
 
 
 def generate_order_number():
-    return f"NJ-{get_random_string(10, allowed_chars='0123456789').upper()}"
+    return f"NJ-{get_random_string(4, allowed_chars='0123456789').upper()}"
 
 
 class Order(models.Model):
@@ -38,6 +38,11 @@ class Order(models.Model):
         WHATSAPP = "whatsapp", "WhatsApp Order"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     order_id = models.CharField(
+#     max_length=20,
+#     blank=True,
+#     null=True
+# )
 
     order_number = models.CharField(
         max_length=20,
@@ -166,7 +171,21 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order_number
+    # def save(self, *args, **kwargs):
+    #     if not self.order_id:
+    #         last_order = Order.objects.order_by("-placed_at").first()
 
+    #         if last_order and last_order.order_id:
+    #             try:
+    #                 last_number = int(last_order.order_id.split("-")[1])
+    #             except (IndexError, ValueError):
+    #                 last_number = 0
+    #         else:
+    #             last_number = 0
+
+    #         self.order_id = f"ORD-{last_number + 1:03d}"
+
+    #     super().save(*args, **kwargs)
     @property
     def total_items(self):
         return sum(item.quantity for item in self.items.all())

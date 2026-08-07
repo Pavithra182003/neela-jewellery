@@ -1,12 +1,13 @@
 import django_filters
+from django.db.models import F
+from django.db.models.functions import Coalesce
 
 from .models import Product
 
 
 class ProductFilter(django_filters.FilterSet):
-
-    min_price = django_filters.NumberFilter(field_name="price", lookup_expr="gte")
-    max_price = django_filters.NumberFilter(field_name="price", lookup_expr="lte")
+    min_price = django_filters.NumberFilter(method="filter_min_price")
+    max_price = django_filters.NumberFilter(method="filter_max_price")
 
     category = django_filters.CharFilter(method="filter_category")
     gender = django_filters.CharFilter(method="filter_gender")
@@ -27,6 +28,18 @@ class ProductFilter(django_filters.FilterSet):
             "max_price",
             "in_stock",
         ]
+
+    def filter_min_price(self, queryset, name, value):
+        queryset = queryset.annotate(
+            selling_price=Coalesce(F("discount_price"), F("price"))
+        )
+        return queryset.filter(selling_price__gte=value)
+
+    def filter_max_price(self, queryset, name, value):
+        queryset = queryset.annotate(
+            selling_price=Coalesce(F("discount_price"), F("price"))
+        )
+        return queryset.filter(selling_price__lte=value)
 
     def filter_category(self, queryset, name, value):
         categories = [x.strip() for x in value.split(",") if x.strip()]

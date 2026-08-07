@@ -8,6 +8,7 @@ file is identical in dev / staging / production — only the .env changes.
 import os
 from datetime import timedelta
 from pathlib import Path
+import dj_database_url
 
 from dotenv import load_dotenv
 
@@ -29,7 +30,8 @@ def env(key, default=None, cast=str):
 # ------------------------------------------------------------------
 SECRET_KEY = env("DJANGO_SECRET_KEY", "unsafe-dev-key-change-me")
 DEBUG = env("DJANGO_DEBUG", False, bool)
-ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS",
+    "localhost,127.0.0.1,www.neelajewellers.com,neelajewellers.com").split(",")
 
 # ------------------------------------------------------------------
 # APPLICATIONS
@@ -60,7 +62,8 @@ INSTALLED_APPS = [
     "payments",
     "reviews",
     "notifications",
-    "gallery"
+    "gallery",
+    "newsletter",
 ]
 
 MIDDLEWARE = [
@@ -72,6 +75,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -99,14 +104,10 @@ ASGI_APPLICATION = "config.asgi.application"
 # DATABASE (PostgreSQL)
 # ------------------------------------------------------------------
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("DB_NAME", "neela_jewellery"),
-        "USER": env("DB_USER", "postgres"),
-        "PASSWORD": env("DB_PASSWORD", "postgres"),
-        "HOST": env("DB_HOST", "localhost"),
-        "PORT": env("DB_PORT", "5432"),
-    }
+    "default": dj_database_url.config(
+        default=f"postgresql://{env('DB_USER','postgres')}:{env('DB_PASSWORD','postgres')}@{env('DB_HOST','localhost')}:{env('DB_PORT','5432')}/{env('DB_NAME','neela_jewellery')}",
+        conn_max_age=3600,
+    )
 }
 
 AUTH_USER_MODEL = "users.User"
@@ -173,6 +174,7 @@ REST_FRAMEWORK = {
 
 # Password-reset links stay valid for 1 hour.
 PASSWORD_RESET_TIMEOUT = 3600
+OWNER_EMAIL = "pavithrabatta93988@gmail.com"
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
@@ -186,10 +188,10 @@ SIMPLE_JWT = {
 # CORS / CSRF
 # ------------------------------------------------------------------
 CORS_ALLOWED_ORIGINS = env(
-    "CORS_ALLOWED_ORIGINS", "http://localhost:5173"
+    "CORS_ALLOWED_ORIGINS", "http://localhost:5173,https://www.neelajewellers.com,https://neelajewellers.com"
 ).split(",")
 CSRF_TRUSTED_ORIGINS = env(
-    "CSRF_TRUSTED_ORIGINS", "http://localhost:5173"
+    "CSRF_TRUSTED_ORIGINS", "http://localhost:5173,https://www.neelajewellers.com,https://neelajewellers.com"
 ).split(",")
 
 # ------------------------------------------------------------------
