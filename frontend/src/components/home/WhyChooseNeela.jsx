@@ -10,12 +10,7 @@ import { HiShieldCheck } from "react-icons/hi";
 import Container from "../common/Container";
 
 const FEATURES = [
-  {
-    icon: HiShieldCheck,
-    title: "Hallmarked Jewellery",
-    description:
-      "Every piece is BIS hallmarked with authenticity certification included.",
-  },
+  
   {
     icon: FiAward,
     title: "Premium Quality",

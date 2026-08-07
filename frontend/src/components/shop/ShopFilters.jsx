@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GENDER_OPTIONS, MATERIAL_OPTIONS, PRICE_MAX, PRICE_MIN } from "./filterOptions";
+import { GENDER_OPTIONS, MATERIAL_OPTIONS, PRICE_OPTIONS,PRICE_MAX, PRICE_MIN } from "./filterOptions";
 
 function FilterSection({ title, children }) {
   return (
@@ -12,29 +12,50 @@ function FilterSection({ title, children }) {
 
 function Checkbox({ checked, onChange, label }) {
   return (
-    <label className="flex cursor-pointer items-center gap-2.5 py-1 text-sm text-charcoal/80 transition-colors hover:text-gold-dark">
+    <label
+      className="flex cursor-pointer items-center gap-3 py-2"
+    >
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={onChange}
+        className="hidden"
+      />
+
       <span
-        className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-sm border transition-colors ${
-          checked ? "border-gold-dark bg-gold-dark" : "border-charcoal/30"
+        className={`flex h-5 w-5 items-center justify-center rounded border ${
+          checked
+            ? "border-gold-dark bg-gold-dark"
+            : "border-gray-400 bg-white"
         }`}
       >
         {checked && (
-          <svg viewBox="0 0 12 12" className="h-2.5 w-2.5 fill-none stroke-cream" strokeWidth={2}>
-            <path d="M2 6l2.5 2.5L10 3" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-3 w-3"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="white"
+            strokeWidth="3"
+          >
+            <path
+              d="M5 10l3 3 7-7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         )}
       </span>
-      <input type="checkbox" checked={checked} onChange={onChange} className="sr-only" />
-      {label}
+
+      <span className="text-sm text-charcoal">{label}</span>
     </label>
   );
 }
-
 /**
  * filters: { category, material, gender, min_price, max_price, in_stock }
  * onChange(key, value) — value === null/"" clears that filter
  */
-export default function ShopFilters({ filters, onChange, onClearAll, categories = [] }) {
+export default function ShopFilters({ filters, onChange, onMultiChange,onClearAll, categories = [] }) {
   const [priceRange, setPriceRange] = useState([
     filters.min_price ? Number(filters.min_price) : PRICE_MIN,
     filters.max_price ? Number(filters.max_price) : PRICE_MAX,
@@ -130,38 +151,29 @@ export default function ShopFilters({ filters, onChange, onClearAll, categories 
       </FilterSection>
 
       <FilterSection title="PRICE">
-  <div className="space-y-1">
-    {[
-      { label: "Under ₹500", min: null, max: "500" },
-      { label: "₹500 - ₹1,000", min: "500", max: "1000" },
-      { label: "₹1,000 - ₹2,000", min: "1000", max: "2000" },
-      { label: "₹2,000 - ₹5,000", min: "2000", max: "5000" },
-      { label: "Above ₹5,000", min: "5000", max: null },
-    ].map((price) => (
-      <Checkbox
-        key={price.label}
-        checked={
-          (filters.min_price || "") === String(price.min || "") &&
-          (filters.max_price || "") === String(price.max || "")
-        }
-        onChange={() => {
+      <div className="space-y-0.5">
+        {PRICE_OPTIONS.map((price) => {
           const isSelected =
-            (filters.min_price || "") === String(price.min || "") &&
-            (filters.max_price || "") === String(price.max || "");
+            filters.min_price == price.min &&
+            filters.max_price == price.max;
 
-          if (isSelected) {
-            onChange("min_price", null);
-            onChange("max_price", null);
-          } else {
-            onChange("min_price", price.min);
-            onChange("max_price", price.max);
-          }
-        }}
-        label={price.label}
-      />
-    ))}
-  </div>
-</FilterSection>
+          return (
+            <Checkbox
+              key={price.label}
+              checked={isSelected}
+              onChange={() => {
+            onMultiChange({
+              min_price: price.min,
+              max_price: price.max,
+            });
+
+              }}
+              label={price.label}
+            />
+          );
+        })}
+      </div>
+    </FilterSection>
 
             <FilterSection title="AVAILABILITY">
         <Checkbox

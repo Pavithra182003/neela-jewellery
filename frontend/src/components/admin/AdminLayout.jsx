@@ -8,6 +8,7 @@ import {
   FiTag,
   FiUsers,
   FiInstagram,
+  FiMail,
 } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
 
@@ -19,6 +20,7 @@ const LINKS = [
   { to: "/admin/coupons", label: "Coupons", icon: FiTag },
   { to: "/admin/reviews", label: "Reviews", icon: FiMessageSquare },
   { to: "/admin/customers", label: "Customers", icon: FiUsers },
+  { to: "/admin/subscribers", label: "Subscribers", icon: FiMail },
   { to: "/admin/gallery", label: "Instagram Gallery", icon: FiInstagram },
 ];
 

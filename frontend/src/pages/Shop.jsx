@@ -93,6 +93,20 @@ export default function Shop() {
     next.delete("page"); // any filter change resets to page 1
     setSearchParams(next);
   };
+  const updateMultipleParams = (params) => {
+  const next = new URLSearchParams(searchParams);
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value === null || value === "" || value === undefined) {
+      next.delete(key);
+    } else {
+      next.set(key, value);
+    }
+  });
+
+  next.delete("page");
+  setSearchParams(next);
+};
 
   const handleSortChange = (value) => {
     const next = new URLSearchParams(searchParams);
@@ -133,7 +147,7 @@ export default function Shop() {
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-[240px_1fr]">
         <aside className="hidden lg:block">
-          <ShopFilters filters={filters} onChange={updateParam} onClearAll={clearAll} categories={categories} />
+          <ShopFilters filters={filters} onChange={updateParam} onMultiChange={updateMultipleParams} onClearAll={clearAll} categories={categories} />
         </aside>
 
         <div>

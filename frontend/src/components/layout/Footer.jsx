@@ -6,19 +6,29 @@ import { newsletterService } from "../../services/newsletterService";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState("idle"); // idle | loading | done | error
+  const [status, setStatus] = useState("idle"); 
+  const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus("loading");
-    try {
-      await newsletterService.subscribe(email);
-      setStatus("done");
-      setEmail("");
-    } catch {
-      setStatus("error");
-    }
-  };
+  e.preventDefault();
+  setStatus("loading");
+
+  try {
+    const data = await newsletterService.subscribe(email);
+
+    setMessage(data.detail);
+    setStatus("done");
+    setEmail("");
+
+  } catch (err) {
+    setMessage(
+      err.response?.data?.detail ||
+      "Something went wrong. Please try again."
+    );
+
+    setStatus("error");
+  }
+};
 
   return (
     <footer className="mt-24 bg-charcoal text-cream">
@@ -30,36 +40,50 @@ export default function Footer() {
               JEWELLERY
             </span>
             <p className="mt-4 max-w-xs text-sm text-cream/60">
-              Hallmarked, handcrafted jewelry designed for the moments you'll tell stories about.
+              Beautiful jewellery that reflects your style and celebrates every moment.
             </p>
             <form onSubmit={handleSubmit} className="mt-6 flex max-w-sm">
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Your email"
-                disabled={status === "loading"}
-                className="flex-1 border border-cream/30 bg-transparent px-4 py-2 text-sm placeholder:text-cream/40 focus:border-gold focus:outline-none disabled:opacity-50"
-              />
-              <button
-                type="submit"
-                disabled={status === "loading"}
-                className="border border-gold px-4 py-2 text-sm text-gold transition-colors hover:bg-gold hover:text-charcoal disabled:opacity-50"
-              >
-                {status === "loading" ? "…" : status === "done" ? "Thank you" : "Join"}
-              </button>
-            </form>
-            {status === "error" && (
-              <p className="mt-2 text-xs text-red-400">Something went wrong. Please try again.</p>
-            )}
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Your email"
+              disabled={status === "loading"}
+              className="flex-1 border border-cream/30 bg-transparent px-4 py-2 text-sm placeholder:text-cream/40 focus:border-gold focus:outline-none disabled:opacity-50"
+            />
+
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className="border border-gold px-4 py-2 text-sm text-gold transition-colors hover:bg-gold hover:text-charcoal disabled:opacity-50"
+            >
+              {status === "loading"
+                ? "..."
+                : status === "done"
+                ? "Joined"
+                : "Join"}
+            </button>
+          </form>
+
+          {message && (
+            <p
+              className={`mt-2 text-xs ${
+                status === "done"
+                  ? "text-green-400"
+                  : "text-red-400"
+              }`}
+            >
+              {message}
+            </p>
+          )}
           </div>
 
           <div>
             <h4 className="mb-4 text-xs tracking-[0.3em] text-gold">SHOP</h4>
             <ul className="space-y-2 text-sm text-cream/70">
               <li><Link to="/shop" className="hover:text-gold">All Jewelry</Link></li>
-              <li><Link to="/collections" className="hover:text-gold">Collections</Link></li>
+              <li><a href="/#shop-by-collection" className="hover:text-gold">Collections</a></li>
               <li><Link to="/shop?is_new_arrival=true" className="hover:text-gold">New Arrivals</Link></li>
               <li><Link to="/shop?is_bestseller=true" className="hover:text-gold">Best Sellers</Link></li>
             </ul>
@@ -90,15 +114,15 @@ export default function Footer() {
             © {new Date().getFullYear()} Neela Jewellery. All rights reserved.
           </p>
           <div className="flex items-center gap-5">
-            <a href="#" aria-label="Instagram" className="text-cream/60 hover:text-gold">
+            <a href="https://www.instagram.com/neela_jewellers/" aria-label="Instagram" className="text-cream/60 hover:text-gold">
               <FiInstagram size={18} />
             </a>
-            <a href="#" aria-label="Facebook" className="text-cream/60 hover:text-gold">
+            {/*<a href="#" aria-label="Facebook" className="text-cream/60 hover:text-gold">
               <FiFacebook size={18} />
             </a>
             <a href="#" aria-label="YouTube" className="text-cream/60 hover:text-gold">
               <FiYoutube size={18} />
-            </a>
+            </a>*/}
           </div>
         </div>
       </Container>

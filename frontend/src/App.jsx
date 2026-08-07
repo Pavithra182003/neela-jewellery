@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-
+import AdminSubscribers from "./pages/admin/AdminSubscribers";
 import Layout from "./components/layout/Layout";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminRoute from "./routes/AdminRoute";
@@ -53,6 +53,7 @@ function App() {
           <Route path="reviews" element={<AdminReviews />} />
           <Route path="customers" element={<AdminCustomers />}/>
           <Route path="gallery" element={<InstagramGallery />} />
+          <Route path="subscribers" element={<AdminSubscribers />} />
         </Route>
       </Route>
 

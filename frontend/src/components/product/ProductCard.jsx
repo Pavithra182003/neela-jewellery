@@ -118,7 +118,7 @@ export default function ProductCard({ product }) {
           )}
         </div>
 
-        <div className="mt-3 space-y-1">
+        <div className="mt-3 flex min-h-[120px] flex-col">
           <p className="text-[11px] tracking-[0.2em] text-charcoal/50">{product.category}</p>
           <h3 className="truncate font-display text-base text-charcoal">{product.name}</h3>
 
@@ -130,13 +130,18 @@ export default function ProductCard({ product }) {
             </div>
           )}
 
-          <div className="flex items-center justify-between pt-1">
-            <div className="flex items-baseline gap-2">
-              <span className="font-medium text-charcoal">₹{product.current_price}</span>
-              {product.discount_percentage > 0 && (
-                <span className="text-xs text-charcoal/40 line-through">₹{product.price}</span>
-              )}
-            </div>
+          <div className="flex items-center justify-between pt-2">
+          <div className="flex items-center gap-2 whitespace-nowrap">
+            <span className="text-lg font-semibold text-charcoal">
+              ₹{product.current_price}
+            </span>
+
+            {product.discount_percentage > 0 && (
+              <span className="text-sm text-charcoal/40 line-through">
+                ₹{product.price}
+              </span>
+            )}
+          </div>
 
             <button
               onClick={handleAddToCart}

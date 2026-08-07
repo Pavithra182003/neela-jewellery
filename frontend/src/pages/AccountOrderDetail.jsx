@@ -128,6 +128,14 @@ export default function AccountOrderDetail() {
               <div className="flex-1">
                 <p className="text-sm text-charcoal">{item.product_name}</p>
                 <p className="text-xs text-charcoal/50">Qty: {item.quantity} × ₹{item.price}</p>
+                {order.status === "delivered" && (
+                <Link
+                  to={`/product/${item.product_slug}`}
+                  className="mt-2 inline-block rounded border border-gold-dark px-3 py-1 text-xs text-gold-dark transition hover:bg-gold-dark hover:text-white"
+                >
+                  Write Review
+                </Link>
+              )}
               </div>
               <p className="text-sm font-medium text-charcoal">₹{item.subtotal}</p>
             </div>

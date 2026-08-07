@@ -94,24 +94,39 @@ export default function AdminDashboard() {
               Manage
             </Link>
           </div>
-          <div className="space-y-2">
-            {lowStock.length === 0 && (
-              <p className="rounded-lg border border-charcoal/10 p-4 text-sm text-charcoal/40">
-                Nothing running low right now.
-              </p>
-            )}
-            {lowStock.map((product) => (
-              <div
-                key={product.id}
-                className="flex items-center justify-between rounded-lg border border-red-100 bg-red-50 px-4 py-3"
-              >
-                <span className="truncate text-sm text-charcoal">{product.name}</span>
-                <span className="flex-shrink-0 text-xs font-medium text-red-600">
-                  {product.stock_quantity} left
-                </span>
-              </div>
-            ))}
-          </div>
+          <div className="rounded-lg border border-charcoal/10 p-4">
+  {lowStock.length === 0 ? (
+    <p className="text-sm text-green-600 font-medium">
+      ✅ All products are sufficiently stocked.
+    </p>
+  ) : lowStock.length === 1 ? (
+    <p className="text-sm text-red-600 font-medium">
+      ⚠️ <strong>{lowStock[0].name}</strong> is running low on stock.
+      Only <strong>{lowStock[0].stock_quantity}</strong> item
+      {lowStock[0].stock_quantity > 1 ? "s" : ""} remaining.
+    </p>
+  ) : (
+    <>
+      <p className="mb-3 text-sm font-medium text-red-600">
+        ⚠️ {lowStock.length} products are running low on stock.
+      </p>
+
+      <ul className="space-y-2">
+        {lowStock.map((product) => (
+          <li
+            key={product.id}
+            className="flex justify-between text-sm text-charcoal"
+          >
+            <span>{product.name}</span>
+            <span className="font-medium text-red-600">
+              {product.stock_quantity} left
+            </span>
+          </li>
+        ))}
+      </ul>
+    </>
+  )}
+</div>
         </div>
       </div>
     </div>
