@@ -30,10 +30,10 @@ def env(key, default=None, cast=str):
 # ------------------------------------------------------------------
 SECRET_KEY = env("DJANGO_SECRET_KEY", "unsafe-dev-key-change-me")
 DEBUG = env("DJANGO_DEBUG", False, bool)
-ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS",
-    "localhost,127.0.0.1,www.neelajewellers.com,neelajewellers.com").split(",")
-
-# ------------------------------------------------------------------
+ALLOWED_HOSTS = env(
+    "DJANGO_ALLOWED_HOSTS",
+    "localhost,127.0.0.1,neela-jewellery.onrender.com,www.neelajewellers.com,neelajewellers.com"
+).split(",")
 # APPLICATIONS
 # ------------------------------------------------------------------
 INSTALLED_APPS = [
@@ -103,13 +103,34 @@ ASGI_APPLICATION = "config.asgi.application"
 # ------------------------------------------------------------------
 # DATABASE (PostgreSQL)
 # ------------------------------------------------------------------
-DATABASES = {
-    "default": dj_database_url.parse(
-        env("DATABASE_URL"),
-        conn_max_age=600,
-    )
-}
+# ------------------------------------------------------------------
+# DATABASE (PostgreSQL)
+# ------------------------------------------------------------------
+print("DATABASE_URL =", repr(os.environ.get("DATABASE_URL")))
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+        )
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env("DB_NAME", "neela_jewellery"),
+            "USER": env("DB_USER", "postgres"),
+            "PASSWORD": env("DB_PASSWORD", "postgres"),
+            "HOST": env("DB_HOST", "localhost"),
+            "PORT": env("DB_PORT", "5432"),
+        }
+    }
+
 AUTH_USER_MODEL = "users.User"
+
 
 # ------------------------------------------------------------------
 # PASSWORD VALIDATION
