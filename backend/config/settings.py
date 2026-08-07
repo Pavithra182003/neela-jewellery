@@ -104,12 +104,11 @@ ASGI_APPLICATION = "config.asgi.application"
 # DATABASE (PostgreSQL)
 # ------------------------------------------------------------------
 DATABASES = {
-    "default": dj_database_url.config(
-        default=f"postgresql://{env('DB_USER','postgres')}:{env('DB_PASSWORD','postgres')}@{env('DB_HOST','localhost')}:{env('DB_PORT','5432')}/{env('DB_NAME','neela_jewellery')}",
-        conn_max_age=3600,
+    "default": dj_database_url.parse(
+        env("DATABASE_URL"),
+        conn_max_age=600,
     )
 }
-
 AUTH_USER_MODEL = "users.User"
 
 # ------------------------------------------------------------------
