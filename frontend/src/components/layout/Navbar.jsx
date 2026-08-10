@@ -86,350 +86,132 @@ export default function Navbar() {
       {(!transparent || scrolled) && <TopAnnouncementBar />}
 
       <nav
-  className={`relative z-50 w-full border-b border-gold/20 transition-all duration-300 ${
-    isLight
-      ? "bg-transparent"
-      : "bg-[#ddd4c7] shadow-sm"
-  }`}
->
-  <Container
-    className="
-      flex
-      h-[72px]
-      w-full
-      items-center
-      justify-between
-      px-4
-      sm:h-20
-      sm:px-6
-      lg:grid
-      lg:h-28
-      lg:grid-cols-[220px_1fr_220px]
-      lg:px-8
-    "
-  >
-
-    {/* MOBILE MENU BUTTON */}
-    <button
-      className={`
-        flex
-        items-center
-        justify-center
-        p-2
-        lg:hidden
-        ${isLight ? "text-cream" : "text-charcoal"}
-      `}
-      onClick={() => setMobileOpen(true)}
-      aria-label="Open menu"
-    >
-      <FiMenu size={23} />
-    </button>
-
-
-    {/* LOGO */}
-    <div
-      className="
-        absolute
-        left-1/2
-        -translate-x-1/2
-        lg:static
-        lg:translate-x-0
-      "
-    >
-      <div className="flex items-center justify-center">
-        <h1
-          className={`
-            whitespace-nowrap
-            font-serif
-            text-xl
-            font-semibold
-            tracking-[4px]
-            sm:text-2xl
-            sm:tracking-[5px]
-            lg:text-4xl
-            lg:tracking-[8px]
-            ${isLight ? "text-cream" : "text-charcoal"}
-          `}
-        >
-          NEELA
-          <span
-            className="
-              ml-2
-              text-[#9c8155]
-              font-normal
-              tracking-[2px]
-              sm:ml-3
-              sm:tracking-[3px]
-              lg:ml-4
-              lg:tracking-[4px]
-            "
+         className="relative border-b border-gold/20 bg-[#ddd4c7] shadow-sm"
+      >
+        <Container className="grid grid-cols-[220px_1fr_220px] items-center h-28 px-8">
+          <button
+            className={`-ml-2 p-2 lg:hidden ${isLight ? "text-cream" : "text-charcoal"}`}
+            onClick={() => setMobileOpen(true)}
+            aria-label="Open menu"
           >
-            JEWELLERS
-          </span>
-        </h1>
-      </div>
-    </div>
+            <FiMenu size={22} />
+          </button>
 
+          <div className="scale-125">
+            <div className="flex items-center justify-start pl-4">
+               <Logo />
+             </div>
+          </div>
+          <div className="flex justify-center">
+          <h1 className="text-4xl font-serif tracking-[8px] font-semibold">
+              NEELA
+             <span className="ml-4 text-[#9c8155] tracking-[4px] font-normal">
+               JEWELLERS
+              </span>
+          </h1>
+          </div>
+          
 
-    {/* DESKTOP CENTER */}
-    <div className="hidden lg:flex lg:justify-center">
-      <Logo />
-    </div>
+          <div className="flex justify-end items-center gap-6 w-full">
+            <button className={iconClasses} onClick={() => setSearchOpen((v) => !v)} aria-label="Search">
+              <FiSearch size={19} />
+            </button>
 
+            <Link to="/wishlist" className={iconClasses} aria-label="Wishlist">
+              <FiHeart size={19} />
+              <IconBadge count={wishlistCount} light={isLight} />
+            </Link>
 
-    {/* RIGHT SIDE ICONS */}
-    <div
-      className="
-        ml-auto
-        flex
-        items-center
-        gap-1
-        sm:gap-2
-        lg:gap-4
-      "
-    >
+            <Link to="/cart" className={iconClasses} aria-label="Cart">
+              <FiShoppingBag size={19} />
+              <IconBadge count={cartCount} light={isLight} />
+            </Link>
 
-      {/* SEARCH */}
-      <button
-        className={`
-          relative
-          p-2
-          transition-all
-          duration-300
-          ${
-            isLight
-              ? "text-cream hover:text-gold-light"
-              : "text-charcoal hover:text-[#9c8155]"
-          }
-        `}
-        onClick={() => setSearchOpen((v) => !v)}
-        aria-label="Search"
-      >
-        <FiSearch size={19} />
-      </button>
+            <div className="relative hidden sm:block">
+              <button
+                className={iconClasses}
+                onClick={() => setAccountMenuOpen((v) => !v)}
+                
+                aria-label="Account"
+              >
+                <FiUser size={19} />
+              </button>
 
+              {accountMenuOpen && (
+                <div className="absolute right-0 top-full mt-2 w-48 rounded-md border border-gold/20 bg-cream py-2 shadow-lg">
+                  {isAuthenticated ? (
+                    <>
+                      <p className="truncate px-4 py-1.5 text-xs text-charcoal/50">{user?.email}</p>
+                      <Link to="/account" className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark">
+                        My Account
+                      </Link>
+                      <Link to="/account/orders" className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark">
+                        My Orders
+                      </Link>
+                      {user?.is_staff && (
+                        <Link to="/admin" className="block px-4 py-2 text-sm text-gold-dark hover:bg-gold/10">
+                          Admin Panel
+                        </Link>
+                      )}
+                      <button
+                        onClick={logout}
+                        className="block w-full px-4 py-2 text-left text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        to="/login"
+                        onClick={() => setAccountMenuOpen(false)}
+                        className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
+                      >
+                        Login
+                      </Link>
 
-      {/* WISHLIST */}
-      <Link
-        to="/wishlist"
-        className={`
-          relative
-          p-2
-          transition-all
-          duration-300
-          ${
-            isLight
-              ? "text-cream hover:text-gold-light"
-              : "text-charcoal hover:text-[#9c8155]"
-          }
-        `}
-        aria-label="Wishlist"
-      >
-        <FiHeart size={19} />
+                      <Link
+                        to="/register"
+                        onClick={() => setAccountMenuOpen(false)}
+                        className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
+                      >
+                        Register
+                      </Link>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </Container>
 
-        <IconBadge
-          count={wishlistCount}
-          light={isLight}
-        />
-      </Link>
+        <AnimatePresence>
+          {megaMenuOpen && (
+            <div onMouseEnter={() => setMegaMenuOpen(true)} onMouseLeave={() => setMegaMenuOpen(false)}>
+              <MegaMenu categories={categories} onNavigate={() => setMegaMenuOpen(false)} />
+            </div>
+          )}
+        </AnimatePresence>
 
-
-      {/* CART */}
-      <Link
-        to="/cart"
-        className={`
-          relative
-          p-2
-          transition-all
-          duration-300
-          ${
-            isLight
-              ? "text-cream hover:text-gold-light"
-              : "text-charcoal hover:text-[#9c8155]"
-          }
-        `}
-        aria-label="Cart"
-      >
-        <FiShoppingBag size={19} />
-
-        <IconBadge
-          count={cartCount}
-          light={isLight}
-        />
-      </Link>
-
-
-      {/* USER - DESKTOP ONLY */}
-      <div className="relative hidden sm:block">
-        <button
-          className={`
-            p-2
-            transition-all
-            duration-300
-            ${
-              isLight
-                ? "text-cream hover:text-gold-light"
-                : "text-charcoal hover:text-[#9c8155]"
-            }
-          `}
-          onClick={() =>
-            setAccountMenuOpen((v) => !v)
-          }
-          aria-label="Account"
-        >
-          <FiUser size={19} />
-        </button>
-
-        {accountMenuOpen && (
-          <div className="absolute right-0 top-full z-50 mt-2 w-48 rounded-md border border-gold/20 bg-cream py-2 shadow-lg">
-
-            {isAuthenticated ? (
-              <>
-                <p className="truncate px-4 py-1.5 text-xs text-charcoal/50">
-                  {user?.email}
-                </p>
-
-                <Link
-                  to="/account"
-                  className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
-                >
-                  My Account
-                </Link>
-
-                <Link
-                  to="/account/orders"
-                  className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
-                >
-                  My Orders
-                </Link>
-
-                {user?.is_staff && (
-                  <Link
-                    to="/admin"
-                    className="block px-4 py-2 text-sm text-gold-dark hover:bg-gold/10"
-                  >
-                    Admin Panel
-                  </Link>
-                )}
-
-                <button
-                  onClick={logout}
-                  className="block w-full px-4 py-2 text-left text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  onClick={() => setAccountMenuOpen(false)}
-                  className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
-                >
-                  Login
-                </Link>
-
-                <Link
-                  to="/register"
-                  onClick={() => setAccountMenuOpen(false)}
-                  className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
-                >
-                  Register
-                </Link>
-              </>
-            )}
-
+        {searchOpen && (
+          <div className="border-t border-gold/20 bg-cream">
+            <Container className="py-4">
+              <form onSubmit={handleSearchSubmit} className="flex items-center gap-3">
+                <FiSearch className="text-charcoal/40" size={18} />
+                <input
+                  autoFocus
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search for rings, necklaces, earrings…"
+                  className="flex-1 bg-transparent py-2 text-sm placeholder:text-charcoal/40 focus:outline-none"
+                />
+              </form>
+            </Container>
           </div>
         )}
-      </div>
+      </nav>
 
-    </div>
-
-  </Container>
-
-
-  {/* SEARCH BAR */}
-  {searchOpen && (
-    <div
-      className={`
-        border-t
-        border-gold/20
-        ${
-          isLight
-            ? "bg-black/40 backdrop-blur-md"
-            : "bg-cream"
-        }
-      `}
-    >
-      <Container className="py-3 sm:py-4">
-        <form
-          onSubmit={handleSearchSubmit}
-          className="flex items-center gap-3"
-        >
-          <FiSearch
-            className={
-              isLight
-                ? "text-cream/60"
-                : "text-charcoal/40"
-            }
-            size={18}
-          />
-
-          <input
-            autoFocus
-            type="text"
-            value={searchQuery}
-            onChange={(e) =>
-              setSearchQuery(e.target.value)
-            }
-            placeholder="Search for rings, necklaces, earrings…"
-            className={`
-              flex-1
-              bg-transparent
-              py-2
-              text-sm
-              focus:outline-none
-              ${
-                isLight
-                  ? "text-cream placeholder:text-cream/50"
-                  : "text-charcoal placeholder:text-charcoal/40"
-              }
-            `}
-          />
-        </form>
-      </Container>
-    </div>
-  )}
-
-
-  {/* DESKTOP CATEGORY NAVIGATION */}
-  <div className="hidden lg:block">
-    <CategoryNavbar />
-  </div>
-
-
-  {/* MEGA MENU */}
-  <AnimatePresence>
-    {megaMenuOpen && (
-      <div
-        onMouseEnter={() =>
-          setMegaMenuOpen(true)
-        }
-        onMouseLeave={() =>
-          setMegaMenuOpen(false)
-        }
-      >
-        <MegaMenu
-          categories={categories}
-          onNavigate={() =>
-            setMegaMenuOpen(false)
-          }
-        />
-      </div>
-    )}
-  </AnimatePresence>
-
-</nav>
       <CategoryNavbar />
 
         <MobileMenu
