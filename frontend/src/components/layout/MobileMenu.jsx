@@ -199,61 +199,71 @@ export default function MobileMenu({
               )}
 
               {/* Account */}
-              <div className="border-t border-gold/20 pt-6">
-                <div className="mb-4 flex items-center gap-3">
-                  <FiUser
-                    size={18}
-                    className="text-gold-dark"
-                  />
+              {/* Account */}
+<div className="border-t border-gold/20 pt-6">
+  <div className="mb-4 flex items-center gap-3">
+    <FiUser
+      size={18}
+      className="text-gold-dark"
+    />
 
-                  <p className="text-xs font-medium tracking-[0.2em] text-gold-dark">
-                    ACCOUNT
-                  </p>
-                </div>
+    <p className="text-xs font-medium tracking-[0.2em] text-gold-dark">
+      ACCOUNT
+    </p>
+  </div>
 
-                {isAuthenticated ? (
-                  <>
-                    <p className="mb-3 truncate text-xs text-charcoal/50">
-                      {user?.email}
-                    </p>
+  {isAuthenticated ? (
+    <>
+      <p className="mb-3 truncate text-xs text-charcoal/50">
+        {user?.email}
+      </p>
 
-                    <Link
-                      to="/account"
-                      onClick={onClose}
-                      className="block py-2 text-sm text-charcoal hover:text-gold-dark"
-                    >
-                      My Account
-                    </Link>
+      <Link
+        to="/account"
+        onClick={onClose}
+        className="block py-2 text-sm text-charcoal hover:text-gold-dark"
+      >
+        My Account
+      </Link>
 
-                    <Link
-                      to="/account/orders"
-                      onClick={onClose}
-                      className="block py-2 text-sm text-charcoal hover:text-gold-dark"
-                    >
-                      My Orders
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      to="/login"
-                      onClick={onClose}
-                      className="block py-2 text-sm text-charcoal hover:text-gold-dark"
-                    >
-                      Login
-                    </Link>
+      <Link
+        to="/account/orders"
+        onClick={onClose}
+        className="block py-2 text-sm text-charcoal hover:text-gold-dark"
+      >
+        My Orders
+      </Link>
 
-                    <Link
-                      to="/register"
-                      onClick={onClose}
-                      className="block py-2 text-sm text-charcoal hover:text-gold-dark"
-                    >
-                      Sign Up
-                    </Link>
-                  </>
-                )}
-              </div>
+      {(user?.is_staff || user?.is_superuser) && (
+        <Link
+          to="/admin"
+          onClick={onClose}
+          className="block py-2 text-sm font-medium text-gold-dark hover:text-gold-dark"
+        >
+          Admin Panel
+        </Link>
+      )}
+    </>
+  ) : (
+    <>
+      <Link
+        to="/login"
+        onClick={onClose}
+        className="block py-2 text-sm text-charcoal hover:text-gold-dark"
+      >
+        Login
+      </Link>
 
+      <Link
+        to="/register"
+        onClick={onClose}
+        className="block py-2 text-sm text-charcoal hover:text-gold-dark"
+      >
+        Register
+      </Link>
+    </>
+  )}
+</div>
             </nav>
           </motion.aside>
         </>

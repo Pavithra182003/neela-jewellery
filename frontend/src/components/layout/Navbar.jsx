@@ -211,61 +211,90 @@ export default function Navbar() {
   </Link>
 
   {/* Profile - Mobile + Laptop */}
-  <div className="relative">
+  
+     {/* Profile - Mobile + Laptop */}
+<div className="relative">
+  <button
+    className={iconClasses}
+    onClick={() => setAccountMenuOpen((v) => !v)}
+    aria-label="Account"
+  >
+    <FiUser size={20} />
+  </button>
 
-    <button
-      className={iconClasses}
-      onClick={() => setAccountMenuOpen((v) => !v)}
-      aria-label="Account"
-    >
-      <FiUser size={20} />
-    </button>
+  {accountMenuOpen && (
+    <div className="absolute right-0 top-full z-[100] mt-2 w-52 rounded-md border border-gold/20 bg-cream py-2 shadow-xl">
 
-    {accountMenuOpen && (
-      <div className="absolute right-0 top-full z-50 mt-2 w-48 rounded-md border border-gold/20 bg-cream py-2 shadow-lg">
+      {isAuthenticated ? (
+        <>
+          {/* User Email */}
+          <p className="truncate px-4 py-2 text-xs text-charcoal/50">
+            {user?.email}
+          </p>
 
-        {!isAuthenticated ? (
-          <>
+          {/* My Account */}
+          <Link
+            to="/account"
+            onClick={() => setAccountMenuOpen(false)}
+            className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
+          >
+            My Account
+          </Link>
+
+          {/* My Orders */}
+          <Link
+            to="/account/orders"
+            onClick={() => setAccountMenuOpen(false)}
+            className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
+          >
+            My Orders
+          </Link>
+
+          {/* ADMIN PANEL */}
+          {(user?.is_staff || user?.is_superuser) && (
             <Link
-              to="/login"
+              to="/admin"
               onClick={() => setAccountMenuOpen(false)}
-              className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10"
+              className="block px-4 py-2 text-sm font-medium text-gold-dark hover:bg-gold/10"
             >
-              Login
+              Admin Panel
             </Link>
+          )}
 
-            <Link
-              to="/register"
-              onClick={() => setAccountMenuOpen(false)}
-              className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10"
-            >
-              Sign Up
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link
-              to="/account"
-              onClick={() => setAccountMenuOpen(false)}
-              className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10"
-            >
-              My Account
-            </Link>
+          {/* Logout */}
+          <button
+            onClick={() => {
+              logout();
+              setAccountMenuOpen(false);
+            }}
+            className="block w-full px-4 py-2 text-left text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
+          >
+            Logout
+          </button>
+        </>
+      ) : (
+        <>
+          {/* LOGIN */}
+          <Link
+            to="/login"
+            onClick={() => setAccountMenuOpen(false)}
+            className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
+          >
+            Login
+          </Link>
 
-            <Link
-              to="/account/orders"
-              onClick={() => setAccountMenuOpen(false)}
-              className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10"
-            >
-              My Orders
-            </Link>
-          </>
-        )}
-
-      </div>
-    )}
-
-  </div>
+          {/* REGISTER */}
+          <Link
+            to="/register"
+            onClick={() => setAccountMenuOpen(false)}
+            className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
+          >
+            Register
+          </Link>
+        </>
+      )}
+    </div>
+  )}
 
 </div>
 
