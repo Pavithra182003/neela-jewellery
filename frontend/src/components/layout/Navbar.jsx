@@ -170,7 +170,8 @@ export default function Navbar() {
 
         {/* RIGHT - ICONS */}
         {/* RIGHT SIDE - ALL ICONS */}
-       <div className="ml-auto flex items-center">
+         
+         <div className="ml-auto flex items-center">
 
   {/* Search - Laptop only */}
   <button
@@ -188,6 +189,7 @@ export default function Navbar() {
     aria-label="Wishlist"
   >
     <FiHeart size={19} />
+
     <IconBadge
       count={wishlistCount}
       light={isLight}
@@ -201,6 +203,7 @@ export default function Navbar() {
     aria-label="Cart"
   >
     <FiShoppingBag size={19} />
+
     <IconBadge
       count={cartCount}
       light={isLight}
@@ -209,6 +212,7 @@ export default function Navbar() {
 
   {/* Profile - Mobile + Laptop */}
   <div className="relative">
+
     <button
       className={iconClasses}
       onClick={() => setAccountMenuOpen((v) => !v)}
@@ -219,6 +223,7 @@ export default function Navbar() {
 
     {accountMenuOpen && (
       <div className="absolute right-0 top-full z-50 mt-2 w-48 rounded-md border border-gold/20 bg-cream py-2 shadow-lg">
+
         {!isAuthenticated ? (
           <>
             <Link
@@ -254,20 +259,17 @@ export default function Navbar() {
             >
               My Orders
             </Link>
-
-            <button
-              onClick={logout}
-              className="block w-full px-4 py-2 text-left text-sm text-charcoal hover:bg-gold/10"
-            >
-              Logout
-            </button>
           </>
         )}
+
       </div>
     )}
+
   </div>
 
 </div>
+
+ 
           
         
         
@@ -301,15 +303,12 @@ export default function Navbar() {
 
       <CategoryNavbar />
 
-        <Link to="/wishlist">
-        <FiHeart />
-        <span>Wishlist</span>
-      </Link>
-
-      <Link to="/cart">
-        <FiShoppingBag />
-        <span>Cart</span>
-      </Link>
+        <MobileMenu
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+          categories={categories}
+          navLinks={NAV_LINKS}
+        />
     </header>
   );
 }

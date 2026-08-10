@@ -23,12 +23,7 @@ const FEATURES = [
     description:
       "Bank-grade encryption on every transaction, powered by Razorpay.",
   },
-  {
-    icon: FiRefreshCw,
-    title: "Easy Returns",
-    description:
-      "Not the perfect fit? Return or exchange within 15 days, no questions asked.",
-  },
+
   {
     icon: FiTruck,
     title: "Fast Shipping",
