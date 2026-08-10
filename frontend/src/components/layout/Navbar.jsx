@@ -170,98 +170,56 @@ export default function Navbar() {
 
         {/* RIGHT - ICONS */}
         {/* RIGHT SIDE - ALL ICONS */}
-<div className="ml-auto flex items-center gap-0.5 sm:gap-1 lg:gap-3">
+       <div className="ml-auto flex items-center">
 
-  {/* Search */}
+  {/* Search - Laptop only */}
   <button
-    className="relative flex items-center justify-center p-1 text-charcoal hover:text-[#9c8155] sm:p-2"
+    className={`${iconClasses} hidden lg:flex`}
     onClick={() => setSearchOpen((v) => !v)}
     aria-label="Search"
   >
-    <FiSearch size={17} />
+    <FiSearch size={19} />
   </button>
 
-  {/* Wishlist */}
+  {/* Wishlist - Laptop only */}
   <Link
     to="/wishlist"
-    className="relative flex items-center justify-center p-1 text-charcoal hover:text-[#9c8155] sm:p-2"
+    className={`${iconClasses} hidden lg:flex`}
     aria-label="Wishlist"
   >
-    <FiHeart size={17} />
-
+    <FiHeart size={19} />
     <IconBadge
       count={wishlistCount}
       light={isLight}
     />
   </Link>
 
-  {/* Cart */}
+  {/* Cart - Laptop only */}
   <Link
     to="/cart"
-    className="relative flex items-center justify-center p-1 text-charcoal hover:text-[#9c8155] sm:p-2"
+    className={`${iconClasses} hidden lg:flex`}
     aria-label="Cart"
   >
-    <FiShoppingBag size={17} />
-
+    <FiShoppingBag size={19} />
     <IconBadge
       count={cartCount}
       light={isLight}
     />
   </Link>
 
-  {/* Profile */}
+  {/* Profile - Mobile + Laptop */}
   <div className="relative">
     <button
-      className="flex items-center justify-center p-1 text-charcoal hover:text-[#9c8155] sm:p-2"
+      className={iconClasses}
       onClick={() => setAccountMenuOpen((v) => !v)}
       aria-label="Account"
     >
-      <FiUser size={18} />
+      <FiUser size={20} />
     </button>
 
     {accountMenuOpen && (
-      <div className="absolute right-0 top-full z-50 mt-2 w-44 rounded-md border border-gold/20 bg-cream py-2 shadow-lg">
-
-        {isAuthenticated ? (
-          <>
-            <p className="truncate px-4 py-2 text-xs text-charcoal/50">
-              {user?.email}
-            </p>
-
-            <Link
-              to="/account"
-              onClick={() => setAccountMenuOpen(false)}
-              className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10"
-            >
-              My Account
-            </Link>
-
-            <Link
-              to="/account/orders"
-              onClick={() => setAccountMenuOpen(false)}
-              className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10"
-            >
-              My Orders
-            </Link>
-
-            {user?.is_staff && (
-              <Link
-                to="/admin"
-                onClick={() => setAccountMenuOpen(false)}
-                className="block px-4 py-2 text-sm text-gold-dark hover:bg-gold/10"
-              >
-                Admin Panel
-              </Link>
-            )}
-
-            <button
-              onClick={logout}
-              className="block w-full px-4 py-2 text-left text-sm text-charcoal hover:bg-gold/10"
-            >
-              Logout
-            </button>
-          </>
-        ) : (
+      <div className="absolute right-0 top-full z-50 mt-2 w-48 rounded-md border border-gold/20 bg-cream py-2 shadow-lg">
+        {!isAuthenticated ? (
           <>
             <Link
               to="/login"
@@ -279,8 +237,32 @@ export default function Navbar() {
               Sign Up
             </Link>
           </>
-        )}
+        ) : (
+          <>
+            <Link
+              to="/account"
+              onClick={() => setAccountMenuOpen(false)}
+              className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10"
+            >
+              My Account
+            </Link>
 
+            <Link
+              to="/account/orders"
+              onClick={() => setAccountMenuOpen(false)}
+              className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10"
+            >
+              My Orders
+            </Link>
+
+            <button
+              onClick={logout}
+              className="block w-full px-4 py-2 text-left text-sm text-charcoal hover:bg-gold/10"
+            >
+              Logout
+            </button>
+          </>
+        )}
       </div>
     )}
   </div>
@@ -319,12 +301,15 @@ export default function Navbar() {
 
       <CategoryNavbar />
 
-        <MobileMenu
-          open={mobileOpen}
-          onClose={() => setMobileOpen(false)}
-          categories={categories}
-          navLinks={NAV_LINKS}
-        />
+        <Link to="/wishlist">
+        <FiHeart />
+        <span>Wishlist</span>
+      </Link>
+
+      <Link to="/cart">
+        <FiShoppingBag />
+        <span>Cart</span>
+      </Link>
     </header>
   );
 }
