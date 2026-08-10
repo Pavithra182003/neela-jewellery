@@ -9,7 +9,7 @@ export default function Logo() {
           src={logo}
           alt="Neela Jewellery"
           className="
-            h-10 w-10
+            h-8 w-8
             object-contain
             sm:h-12 sm:w-12
             lg:h-20 lg:w-20
