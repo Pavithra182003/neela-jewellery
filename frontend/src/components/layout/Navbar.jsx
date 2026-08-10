@@ -89,118 +89,190 @@ export default function Navbar() {
          className="relative border-b border-gold/20 bg-[#ddd4c7] shadow-sm"
       >
         <Container
-  className="
-    flex
-    h-[68px]
-    w-full
-    max-w-none
-    items-center
-    px-3
-    sm:h-20
-    sm:px-5
-    lg:h-28
-    lg:max-w-7xl
-    lg:px-8
-  "
->
-  {/* Mobile menu */}
-  <button
-    className={`
-      mr-2
-      flex
-      shrink-0
-      items-center
-      justify-center
-      p-2
-      lg:hidden
-      ${isLight ? "text-cream" : "text-charcoal"}
-    `}
-    onClick={() => setMobileOpen(true)}
-    aria-label="Open menu"
-  >
-    <FiMenu size={22} />
-  </button>
+        
+          className="
+            relative
+            flex
+            h-[68px]
+            w-full
+            max-w-none
+            items-center
+            px-3
+            sm:h-20
+            sm:px-5
+            lg:h-28
+            lg:max-w-7xl
+            lg:px-8
+          "
+        >
+          {/* LEFT - Mobile Menu */}
+          <button
+            className="flex shrink-0 items-center justify-center p-2 text-charcoal lg:hidden"
+            onClick={() => setMobileOpen(true)}
+            aria-label="Open menu"
+          >
+            <FiMenu size={22} />
+          </button>
 
-  {/* Logo + Name */}
-  <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3 lg:flex-none">
-    <Logo />
+          {/* CENTER - NEELA JEWELLERS */}
+          <div
+            className="
+              absolute
+              left-1/2
+              top-1/2
+              -translate-x-1/2
+              -translate-y-1/2
+              whitespace-nowrap
+            "
+          >
+            <h1
+              className="
+                font-serif
+                font-semibold
+                leading-none
+                text-charcoal
+                text-[18px]
+                tracking-[2px]
+                sm:text-2xl
+                sm:tracking-[4px]
+                lg:text-4xl
+                lg:tracking-[8px]
+              "
+            >
+              NEELA
+              <span
+                className="
+                  ml-1
+                  font-normal
+                  text-[#9c8155]
+                  tracking-[1px]
+                  sm:ml-2
+                  sm:tracking-[2px]
+                  lg:ml-4
+                  lg:tracking-[4px]
+                "
+              >
+                JEWELLERS
+              </span>
+            </h1>
+          </div>
 
-    <h1
-      className={`
-        min-w-0
-        whitespace-nowrap
-        font-serif
-        font-semibold
-        leading-none
-        text-[15px]
-        tracking-[1px]
-        sm:text-2xl
-        sm:tracking-[3px]
-        lg:text-4xl
-        lg:tracking-[8px]
-        ${isLight ? "text-cream" : "text-charcoal"}
-      `}
-    >
-      NEELA
-      <span
-        className="
-          ml-1
-          font-normal
-          text-[#9c8155]
-          tracking-[0.5px]
-          sm:ml-2
-          sm:tracking-[2px]
-          lg:ml-4
-          lg:tracking-[4px]
-        "
-      >
-        JEWELLERS
-      </span>
-    </h1>
-  </div>
+          {/* RIGHT - Icons */}
+          <div className="ml-auto flex items-center gap-1 sm:gap-2 lg:gap-4">
 
-  {/* Right icons */}
-  <div className="ml-auto flex shrink-0 items-center gap-0 sm:gap-1 lg:gap-4">
+            {/* Search */}
+            <button
+              className={iconClasses}
+              onClick={() => setSearchOpen((v) => !v)}
+              aria-label="Search"
+            >
+              <FiSearch size={19} />
+            </button>
 
-    <button
-      className={iconClasses}
-      onClick={() => setSearchOpen((v) => !v)}
-      aria-label="Search"
-    >
-      <FiSearch size={18} />
-    </button>
+            {/* Wishlist */}
+            <Link
+              to="/wishlist"
+              className={iconClasses}
+              aria-label="Wishlist"
+            >
+              <FiHeart size={19} />
+              <IconBadge
+                count={wishlistCount}
+                light={isLight}
+              />
+            </Link>
 
-    <Link
-      to="/wishlist"
-      className={iconClasses}
-      aria-label="Wishlist"
-    >
-      <FiHeart size={18} />
-      <IconBadge
-        count={wishlistCount}
-        light={isLight}
-      />
-    </Link>
+            {/* Cart */}
+            <Link
+              to="/cart"
+              className={iconClasses}
+              aria-label="Cart"
+            >
+              <FiShoppingBag size={19} />
+              <IconBadge
+                count={cartCount}
+                light={isLight}
+              />
+            </Link>
 
-    <Link
-      to="/cart"
-      className={iconClasses}
-      aria-label="Cart"
-    >
-      <FiShoppingBag size={18} />
-      <IconBadge
-        count={cartCount}
-        light={isLight}
-      />
-    </Link>
+            {/* PROFILE / ACCOUNT */}
+            <div className="relative">
+              <button
+                className={iconClasses}
+                onClick={() => setAccountMenuOpen((v) => !v)}
+                aria-label="Account"
+              >
+                <FiUser size={20} />
+              </button>
 
-    {/* Account only on laptop */}
-    <div className="relative hidden lg:block">
-      {/* your existing account button/menu */}
-    </div>
+              {accountMenuOpen && (
+                <div className="absolute right-0 top-full z-50 mt-2 w-48 rounded-md border border-gold/20 bg-cream py-2 shadow-lg">
 
-  </div>
-</Container>
+                  {isAuthenticated ? (
+                    <>
+                      <p className="truncate px-4 py-2 text-xs text-charcoal/50">
+                        {user?.email}
+                      </p>
+
+                      <Link
+                        to="/account"
+                        onClick={() => setAccountMenuOpen(false)}
+                        className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10"
+                      >
+                        My Account
+                      </Link>
+
+                      <Link
+                        to="/account/orders"
+                        onClick={() => setAccountMenuOpen(false)}
+                        className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10"
+                      >
+                        My Orders
+                      </Link>
+
+                      {user?.is_staff && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setAccountMenuOpen(false)}
+                          className="block px-4 py-2 text-sm text-gold-dark hover:bg-gold/10"
+                        >
+                          Admin Panel
+                        </Link>
+                      )}
+
+                      <button
+                        onClick={logout}
+                        className="block w-full px-4 py-2 text-left text-sm text-charcoal hover:bg-gold/10"
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        to="/login"
+                        onClick={() => setAccountMenuOpen(false)}
+                        className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10"
+                      >
+                        Login
+                      </Link>
+
+                      <Link
+                        to="/register"
+                        onClick={() => setAccountMenuOpen(false)}
+                        className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10"
+                      >
+                        Sign Up
+                      </Link>
+                    </>
+                  )}
+
+                </div>
+              )}
+            </div>
+
+          </div>
+        </Container>
 
         <AnimatePresence>
           {megaMenuOpen && (
