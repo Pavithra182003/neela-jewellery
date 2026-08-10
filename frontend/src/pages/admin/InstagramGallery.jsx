@@ -124,44 +124,45 @@ export default function InstagramGallery() {
       </form>
 
       <div className="grid grid-cols-4 gap-6">
+  {(Array.isArray(gallery) ? gallery : []).map((item) => (
+    <div
+      key={item.id}
+      className="border rounded-xl p-4"
+    >
+      <img
+        src={
+          item.image?.startsWith("http")
+            ? item.image
+            : `https://neela-jewellery.onrender.com${item.image || ""}`
+        }
+        alt=""
+        className="w-full h-48 object-cover rounded-lg"
+      />
 
-        {Array.isArray(gallery) &&
-           gallery.map((item) => (
+      <p className="mt-3">
+        Order : {item.display_order}
+      </p>
 
-          <div
-            key={item.id}
-            className="border rounded-xl p-4"
-          >
+      <a
+        href={item.instagram_url}
+        target="_blank"
+        rel="noreferrer"
+        className="text-blue-600"
+      >
+        Instagram Link
+      </a>
 
-            <img
-              src={item.image}
-              alt=""
-              className="w-full h-48 object-cover rounded-lg"
-            />
+      <button
+        onClick={() => deleteImage(item.id)}
+        className="bg-red-500 text-white px-4 py-2 rounded mt-3 w-full"
+      >
+        Delete
+      </button>
+    </div>
+  ))}
 
-            <p className="mt-3">
-              Order : {item.display_order}
-            </p>
 
-            <a
-              href={item.instagram_url}
-              target="_blank"
-              rel="noreferrer"
-              className="text-blue-600"
-            >
-              Instagram Link
-            </a>
 
-            <button
-              onClick={() => deleteImage(item.id)}
-              className="bg-red-500 text-white px-4 py-2 rounded mt-3 w-full"
-            >
-              Delete
-            </button>
-
-          </div>
-
-        ))}
 
       </div>
 
