@@ -15,10 +15,11 @@ export default function InstagramGallery() {
     .then((data) => {
       console.log("Gallery Response:", data);
 
-      setImages(Array.isArray(data) ? data : data.results || []);
+      setImages(Array.isArray(data) ? data : []);
     })
     .catch((error) => {
       console.error("Gallery Error:", error);
+      setImages([]);
     });
 }, []);
 

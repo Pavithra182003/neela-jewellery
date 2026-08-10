@@ -9,17 +9,23 @@ export default function InstagramGallery() {
   const [gallery, setGallery] = useState([]);
 
   const fetchGallery = async () => {
-    try {
-      const res = await api.get("/gallery/");
-       setGallery(
-      Array.isArray(res.data)
-        ? res.data
-        : res.data.results || []
-    );
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  try {
+    const res = await api.get("/gallery/");
+
+    console.log("Gallery API response:", res.data);
+
+    const galleryData = Array.isArray(res.data)
+      ? res.data
+      : Array.isArray(res.data?.results)
+        ? res.data.results
+        : [];
+
+    setGallery(galleryData);
+  } catch (err) {
+    console.error("Gallery Error:", err);
+    setGallery([]);
+  }
+};
 
   useEffect(() => {
     fetchGallery();
