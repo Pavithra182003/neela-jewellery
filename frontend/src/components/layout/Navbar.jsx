@@ -14,6 +14,7 @@ import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { useHeaderTheme } from "../../context/HeaderThemeContext";
 import { categoryService } from "../../services/categoryService";
+import logo from "../../assets/images/logo/logo-neela.jpeg";
 
 const NAV_LINKS = [
   { label: "Home", to: "/" },
