@@ -1,5 +1,5 @@
 import uuid
-
+from decimal import Decimal
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -241,7 +241,7 @@ class OrderItem(models.Model):
 
     @property
     def subtotal(self):
-        return self.price * self.quantity
+        return (self.price or Decimal("0.00")) * self.quantity
 
     def save(self, *args, **kwargs):
         if not self.pk and self.product:
