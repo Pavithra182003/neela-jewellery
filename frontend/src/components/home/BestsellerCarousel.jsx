@@ -14,12 +14,23 @@ export default function BestsellerCarousel() {
   const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    productService
-      .getBestsellers()
-      .then((data) => setProducts(data.results || data))
-      .catch(() => setProducts([]))
-      .finally(() => setLoading(false));
-  }, []);
+  productService
+    .getBestsellers()
+    .then((data) => {
+      const bestsellerProducts = Array.isArray(data)
+        ? data
+        : Array.isArray(data?.results)
+          ? data.results
+          : [];
+
+      setProducts(bestsellerProducts);
+    })
+    .catch((error) => {
+      console.error("Bestseller API error:", error);
+      setProducts([]);
+    })
+    .finally(() => setLoading(false));
+}, []);
 
   const pageCount = Math.max(1, Math.ceil(products.length / VISIBLE_DESKTOP));
 
@@ -36,7 +47,12 @@ export default function BestsellerCarousel() {
 
   if (!loading && products.length === 0) return null;
 
-  const visible = products.slice(page * VISIBLE_DESKTOP, page * VISIBLE_DESKTOP + VISIBLE_DESKTOP);
+   const visible = Array.isArray(products)
+  ? products.slice(
+      page * VISIBLE_DESKTOP,
+      page * VISIBLE_DESKTOP + VISIBLE_DESKTOP
+    )
+  : [];
 
   return (
     <section

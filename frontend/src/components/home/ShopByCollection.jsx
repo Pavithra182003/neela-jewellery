@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Container from "../common/Container";
 
-// Import your category images
+// Category images
 import necklace from "../../assets/images/categories/necklace.jpg";
 import earrings from "../../assets/images/categories/earrings.jpg";
 import fingerRing from "../../assets/images/categories/finger-rings.jpg";
@@ -70,18 +70,40 @@ const COLLECTIONS = [
   },
 ];
 
-
 export default function ShopByCollection() {
   return (
-    <section id="shop-by-collection" className="py-20 bg-white">
+    <section
+      id="shop-by-collection"
+      className="w-full overflow-hidden bg-cream py-12 sm:py-16 lg:py-20"
+    >
       <Container>
-        <div className="text-center mb-14">
-          <h2 className="text-5xl font-serif text-[#2c2c2c]">
+        {/* Section Heading */}
+        <div className="mb-8 text-center sm:mb-12">
+          <p className="mb-2 text-xs tracking-[0.3em] text-[#9c8155] sm:text-sm">
+            EXPLORE
+          </p>
+
+          <h2 className="font-display text-3xl text-charcoal sm:text-4xl lg:text-5xl">
             Shop by Collection
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-y-12 gap-x-8">
+        {/* Collection Grid */}
+        <div
+          className="
+            grid
+            w-full
+            grid-cols-2
+            gap-x-4
+            gap-y-8
+            sm:grid-cols-3
+            sm:gap-x-6
+            sm:gap-y-10
+            lg:grid-cols-5
+            lg:gap-x-8
+            lg:gap-y-12
+          "
+        >
           {COLLECTIONS.map((item, index) => (
             <motion.div
               key={item.id}
@@ -92,20 +114,53 @@ export default function ShopByCollection() {
                 duration: 0.4,
                 delay: index * 0.05,
               }}
+              className="min-w-0"
             >
               <Link
                 to={item.link}
-                className="flex flex-col items-center group"
+                className="group flex w-full min-w-0 flex-col items-center"
               >
-                <div className="w-48 h-48 rounded-full overflow-hidden shadow-md transition duration-500 group-hover:scale-105">
+                {/* Image */}
+                <div
+                  className="
+                    aspect-square
+                    w-full
+                    max-w-[140px]
+                    overflow-hidden
+                    rounded-full
+                    shadow-md
+                    transition
+                    duration-500
+                    group-hover:scale-105
+                    sm:max-w-[160px]
+                    lg:max-w-[192px]
+                  "
+                >
                   <img
                     src={item.image}
                     alt={item.name}
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 </div>
 
-                <h3 className="mt-5 text-2xl font-semibold text-gray-900 group-hover:text-[#9c8155] transition">
+                {/* Category Name */}
+                <h3
+                  className="
+                    mt-3
+                    w-full
+                    truncate
+                    text-center
+                    text-sm
+                    font-semibold
+                    text-gray-900
+                    transition
+                    group-hover:text-[#9c8155]
+                    sm:mt-4
+                    sm:text-base
+                    lg:mt-5
+                    lg:text-2xl
+                  "
+                >
                   {item.name}
                 </h3>
               </Link>
