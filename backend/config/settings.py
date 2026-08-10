@@ -215,6 +215,8 @@ CSRF_TRUSTED_ORIGINS = env(
     "CSRF_TRUSTED_ORIGINS", "http://localhost:5173,https://www.neelajewellers.com,https://neelajewellers.com"
 ).split(",")
 
+CORS_ALLOW_CREDENTIALS = True
+
 # ------------------------------------------------------------------
 # FRONTEND (used to build links inside emails, e.g. password reset)
 # ------------------------------------------------------------------
