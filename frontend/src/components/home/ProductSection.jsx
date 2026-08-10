@@ -13,9 +13,17 @@ export default function ProductSection({ eyebrow, title, fetcher, viewAllLink, c
     let cancelled = false;
     setLoading(true);
     fetcher()
-      .then((data) => {
-        if (!cancelled) setProducts(data.results || data);
-      })
+  .then((data) => {
+    if (!cancelled) {
+      const productList = Array.isArray(data)
+        ? data
+        : Array.isArray(data?.results)
+          ? data.results
+          : [];
+
+      setProducts(productList);
+    }
+  })
       .catch(() => {
         if (!cancelled) setProducts([]);
       })
@@ -48,9 +56,13 @@ export default function ProductSection({ eyebrow, title, fetcher, viewAllLink, c
         </div>
 
         <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 lg:grid-cols-4">
-          {loading
-            ? Array.from({ length: 4 }).map((_, i) => <ProductCardSkeleton key={i} />)
-            : products.slice(0, 8).map((product, i) => (
+        {loading
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))
+          : (Array.isArray(products) ? products : [])
+              .slice(0, 8)
+              .map((product, i) => (
                 <motion.div
                   key={product.id}
                   initial={{ opacity: 0, y: 24 }}
@@ -61,7 +73,7 @@ export default function ProductSection({ eyebrow, title, fetcher, viewAllLink, c
                   <ProductCard product={product} />
                 </motion.div>
               ))}
-        </div>
+      </div>
 
         {viewAllLink && (
           <div className="mt-8 text-center sm:hidden">
