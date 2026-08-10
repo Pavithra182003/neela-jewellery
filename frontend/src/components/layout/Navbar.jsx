@@ -13,7 +13,7 @@ import CategoryNavbar from "./CategoryNavbar";
 import Container from "../common/Container";
 import MegaMenu from "./MegaMenu";
 import MobileMenu from "./MobileMenu";
-
+import TopAnnouncementBar from "./TopAnnouncementBar";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
