@@ -97,18 +97,48 @@ export default function Navbar() {
             <FiMenu size={22} />
           </button>
 
-          <div className="scale-125">
-            <div className="flex items-center justify-start pl-4">
-               <Logo />
-             </div>
-          </div>
-          <div className="flex justify-center">
-          <h1 className="text-4xl font-serif tracking-[8px] font-semibold">
+          <div className="flex items-center gap-3 lg:gap-4">
+            {/* Logo */}
+            <div className="shrink-0">
+              <Logo />
+            </div>
+
+            {/* Brand Name */}
+            <h1
+              className={`
+                whitespace-nowrap
+                font-serif
+                font-semibold
+                leading-none
+                text-[17px]
+                tracking-[1.5px]
+                sm:text-2xl
+                sm:tracking-[3px]
+                lg:text-4xl
+                lg:tracking-[8px]
+                ${
+                  isLight
+                    ? "text-cream"
+                    : "text-charcoal"
+                }
+              `}
+            >
               NEELA
-             <span className="ml-4 text-[#9c8155] tracking-[4px] font-normal">
-               JEWELLERS
+              <span
+                className="
+                  ml-1
+                  font-normal
+                  text-[#9c8155]
+                  tracking-[1px]
+                  sm:ml-2
+                  sm:tracking-[2px]
+                  lg:ml-4
+                  lg:tracking-[4px]
+                "
+              >
+                JEWELLERS
               </span>
-          </h1>
+            </h1>
           </div>
           
 
