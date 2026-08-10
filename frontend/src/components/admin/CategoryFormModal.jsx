@@ -153,13 +153,14 @@ export default function CategoryFormModal({
             >
               <option value="">None (Top Level)</option>
 
-              {categories
-                .filter((c) => c.id !== category?.id)
-                .map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
+              {(Array.isArray(categories) ? categories : [])
+            .filter((c) => c.id !== category?.id)
+            .map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+               
             </select>
           </div>
 
