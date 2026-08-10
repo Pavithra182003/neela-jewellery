@@ -112,7 +112,7 @@ export default function AccountOrderDetail() {
                 src={
                   item.product_image_url.startsWith("http")
                     ? item.product_image_url
-                    : `http://127.0.0.1:8000${item.product_image_url}`
+                    : `https://neela-jewellery.onrender.com${item.product_image_url}`
                 }
                 alt={item.product_name}
                 className="h-16 w-16 rounded-md object-cover"
