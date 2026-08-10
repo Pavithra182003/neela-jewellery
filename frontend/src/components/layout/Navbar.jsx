@@ -1,20 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import {
-  FiHeart,
-  FiMenu,
-  FiSearch,
-  FiShoppingBag,
-  FiUser,
-} from "react-icons/fi";
-
+import { FiChevronDown, FiHeart, FiMenu, FiSearch, FiShoppingBag, FiUser } from "react-icons/fi";
 import CategoryNavbar from "./CategoryNavbar";
 import Container from "../common/Container";
 import Logo from "../common/Logo";
+import NavItem from "../common/NavItem";
 import MegaMenu from "./MegaMenu";
 import MobileMenu from "./MobileMenu";
-
+import TopAnnouncementBar from "./TopAnnouncementBar";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
@@ -33,13 +27,10 @@ const NAV_LINKS = [
 
 function IconBadge({ count, light }) {
   if (!count) return null;
-
   return (
     <span
       className={`absolute -right-1 -top-1 flex h-4 min-w-[16px] items-center justify-center rounded-full px-1 text-[10px] font-medium ${
-        light
-          ? "bg-cream text-charcoal"
-          : "bg-gold-dark text-cream"
+        light ? "bg-cream text-charcoal" : "bg-gold-dark text-cream"
       }`}
     >
       {count}
@@ -60,250 +51,87 @@ export default function Navbar() {
   const { itemCount: cartCount } = useCart();
   const { itemCount: wishlistCount } = useWishlist();
   const { transparent } = useHeaderTheme();
-
   const navigate = useNavigate();
 
+  // "Light" mode = transparent hero mode AND not yet scrolled: cream
+  // text/icons over the hero image. Everywhere else uses dark text on
+  // a solid/glass cream background.
   const isLight = transparent && !scrolled;
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 12);
-    };
-
+    const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
-
     window.addEventListener("scroll", onScroll);
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
     categoryService
       .getCategories()
-      .then((data) => {
-        setCategories(
-          Array.isArray(data?.results)
-            ? data.results
-            : Array.isArray(data)
-            ? data
-            : []
-        );
-      })
+      .then((data) => setCategories(data.results || data))
       .catch(() => setCategories([]));
   }, []);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-
     if (!searchQuery.trim()) return;
-
-    navigate(
-      `/shop?search=${encodeURIComponent(
-        searchQuery.trim()
-      )}`
-    );
-
+    navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
     setSearchOpen(false);
     setSearchQuery("");
   };
 
-  const iconClasses = `
-    relative
-    p-1.5
-    sm:p-2
-    transition-all
-    duration-300
-    ${
-      isLight
-        ? "text-cream hover:text-gold-light"
-        : "text-charcoal hover:text-[#9c8155]"
-    }
-  `;
-
+  const iconClasses = "relative p-2 text-charcoal hover:text-[#9c8155] transition-all duration-300";
   return (
-    <header className="relative z-50 w-full min-w-0">
-      
-      {/* NAVBAR */}
-      <nav
-        className={`
-          relative
-          w-full
-          border-b
-          border-gold/20
-          transition-all
-          duration-300
-          ${
-            isLight
-              ? "bg-transparent"
-              : "bg-[#ddd4c7] shadow-sm"
-          }
-        `}
-      >
-        <Container
-          className="
-            relative
-            flex
-            h-[68px]
-            w-full
-            max-w-none
-            items-center
-            justify-between
-            px-3
-            sm:h-20
-            sm:px-6
-            lg:grid
-            lg:h-28
-            lg:max-w-7xl
-            lg:grid-cols-[220px_1fr_220px]
-            lg:px-8
-          "
-        >
+    <header className="sticky top-0 z-40">
+      {(!transparent || scrolled) && <TopAnnouncementBar />}
 
-          {/* MOBILE MENU */}
+      <nav
+         className="relative border-b border-gold/20 bg-[#ddd4c7] shadow-sm"
+      >
+        <Container className="grid grid-cols-[220px_1fr_220px] items-center h-28 px-8">
           <button
-            className={`
-              flex
-              shrink-0
-              items-center
-              justify-center
-              p-2
-              lg:hidden
-              ${
-                isLight
-                  ? "text-cream"
-                  : "text-charcoal"
-              }
-            `}
+            className={`-ml-2 p-2 lg:hidden ${isLight ? "text-cream" : "text-charcoal"}`}
             onClick={() => setMobileOpen(true)}
             aria-label="Open menu"
           >
             <FiMenu size={22} />
           </button>
 
-
-          {/* MOBILE + DESKTOP BRAND */}
-          <div
-            className="
-              absolute
-              left-1/2
-              flex
-              -translate-x-1/2
-              items-center
-              justify-center
-              lg:static
-              lg:translate-x-0
-              lg:justify-start
-            "
-          >
-            <h1
-              className={`
-                whitespace-nowrap
-                font-serif
-                font-semibold
-                text-[17px]
-                leading-none
-                tracking-[1.5px]
-                sm:text-2xl
-                sm:tracking-[3px]
-                lg:text-4xl
-                lg:tracking-[8px]
-                ${
-                  isLight
-                    ? "text-cream"
-                    : "text-charcoal"
-                }
-              `}
-            >
+          <div className="scale-125">
+            <div className="flex items-center justify-start pl-4">
+               <Logo />
+             </div>
+          </div>
+          <div className="flex justify-center">
+          <h1 className="text-4xl font-serif tracking-[8px] font-semibold">
               NEELA
-
-              <span
-                className="
-                  ml-1
-                  text-[#9c8155]
-                  font-normal
-                  tracking-[1px]
-                  sm:ml-2
-                  sm:tracking-[2px]
-                  lg:ml-4
-                  lg:tracking-[4px]
-                "
-              >
-                JEWELLERS
+             <span className="ml-4 text-[#9c8155] tracking-[4px] font-normal">
+               JEWELLERS
               </span>
-            </h1>
+          </h1>
           </div>
+          
 
-
-          {/* DESKTOP LOGO */}
-          <div className="hidden justify-center lg:flex">
-            <Logo />
-          </div>
-
-
-          {/* RIGHT ICONS */}
-          <div
-            className="
-              ml-auto
-              flex
-              shrink-0
-              items-center
-              gap-0
-              sm:gap-1
-              lg:gap-4
-            "
-          >
-
-            {/* SEARCH */}
-            <button
-              className={iconClasses}
-              onClick={() =>
-                setSearchOpen((v) => !v)
-              }
-              aria-label="Search"
-            >
-              <FiSearch size={18} />
+          <div className="flex justify-end items-center gap-6 w-full">
+            <button className={iconClasses} onClick={() => setSearchOpen((v) => !v)} aria-label="Search">
+              <FiSearch size={19} />
             </button>
 
-
-            {/* WISHLIST */}
-            <Link
-              to="/wishlist"
-              className={iconClasses}
-              aria-label="Wishlist"
-            >
-              <FiHeart size={18} />
-
-              <IconBadge
-                count={wishlistCount}
-                light={isLight}
-              />
+            <Link to="/wishlist" className={iconClasses} aria-label="Wishlist">
+              <FiHeart size={19} />
+              <IconBadge count={wishlistCount} light={isLight} />
             </Link>
 
-
-            {/* CART */}
-            <Link
-              to="/cart"
-              className={iconClasses}
-              aria-label="Cart"
-            >
-              <FiShoppingBag size={18} />
-
-              <IconBadge
-                count={cartCount}
-                light={isLight}
-              />
+            <Link to="/cart" className={iconClasses} aria-label="Cart">
+              <FiShoppingBag size={19} />
+              <IconBadge count={cartCount} light={isLight} />
             </Link>
 
-
-            {/* USER - LAPTOP ONLY */}
-            <div className="relative hidden lg:block">
+            <div className="relative hidden sm:block">
               <button
                 className={iconClasses}
-                onClick={() =>
-                  setAccountMenuOpen((v) => !v)
-                }
+                onClick={() => setAccountMenuOpen((v) => !v)}
+                
                 aria-label="Account"
               >
                 <FiUser size={19} />
@@ -311,36 +139,20 @@ export default function Navbar() {
 
               {accountMenuOpen && (
                 <div className="absolute right-0 top-full mt-2 w-48 rounded-md border border-gold/20 bg-cream py-2 shadow-lg">
-
                   {isAuthenticated ? (
                     <>
-                      <p className="truncate px-4 py-1.5 text-xs text-charcoal/50">
-                        {user?.email}
-                      </p>
-
-                      <Link
-                        to="/account"
-                        className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
-                      >
+                      <p className="truncate px-4 py-1.5 text-xs text-charcoal/50">{user?.email}</p>
+                      <Link to="/account" className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark">
                         My Account
                       </Link>
-
-                      <Link
-                        to="/account/orders"
-                        className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
-                      >
+                      <Link to="/account/orders" className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark">
                         My Orders
                       </Link>
-
                       {user?.is_staff && (
-                        <Link
-                          to="/admin"
-                          className="block px-4 py-2 text-sm text-gold-dark hover:bg-gold/10"
-                        >
+                        <Link to="/admin" className="block px-4 py-2 text-sm text-gold-dark hover:bg-gold/10">
                           Admin Panel
                         </Link>
                       )}
-
                       <button
                         onClick={logout}
                         className="block w-full px-4 py-2 text-left text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
@@ -352,9 +164,7 @@ export default function Navbar() {
                     <>
                       <Link
                         to="/login"
-                        onClick={() =>
-                          setAccountMenuOpen(false)
-                        }
+                        onClick={() => setAccountMenuOpen(false)}
                         className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
                       >
                         Login
@@ -362,125 +172,54 @@ export default function Navbar() {
 
                       <Link
                         to="/register"
-                        onClick={() =>
-                          setAccountMenuOpen(false)
-                        }
+                        onClick={() => setAccountMenuOpen(false)}
                         className="block px-4 py-2 text-sm text-charcoal hover:bg-gold/10 hover:text-gold-dark"
                       >
                         Register
                       </Link>
                     </>
                   )}
-
                 </div>
               )}
             </div>
-
           </div>
         </Container>
 
+        <AnimatePresence>
+          {megaMenuOpen && (
+            <div onMouseEnter={() => setMegaMenuOpen(true)} onMouseLeave={() => setMegaMenuOpen(false)}>
+              <MegaMenu categories={categories} onNavigate={() => setMegaMenuOpen(false)} />
+            </div>
+          )}
+        </AnimatePresence>
 
-        {/* SEARCH BAR */}
         {searchOpen && (
-          <div
-            className={`
-              w-full
-              border-t
-              border-gold/20
-              ${
-                isLight
-                  ? "bg-black/40 backdrop-blur-md"
-                  : "bg-cream"
-              }
-            `}
-          >
-            <Container
-              className="
-                w-full
-                max-w-none
-                py-3
-                sm:py-4
-                lg:max-w-7xl
-              "
-            >
-              <form
-                onSubmit={handleSearchSubmit}
-                className="flex items-center gap-3"
-              >
-                <FiSearch
-                  className={
-                    isLight
-                      ? "text-cream/60"
-                      : "text-charcoal/40"
-                  }
-                  size={18}
-                />
-
+          <div className="border-t border-gold/20 bg-cream">
+            <Container className="py-4">
+              <form onSubmit={handleSearchSubmit} className="flex items-center gap-3">
+                <FiSearch className="text-charcoal/40" size={18} />
                 <input
                   autoFocus
                   type="text"
                   value={searchQuery}
-                  onChange={(e) =>
-                    setSearchQuery(e.target.value)
-                  }
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search for rings, necklaces, earrings…"
-                  className={`
-                    flex-1
-                    bg-transparent
-                    py-2
-                    text-sm
-                    focus:outline-none
-                    ${
-                      isLight
-                        ? "text-cream placeholder:text-cream/50"
-                        : "text-charcoal placeholder:text-charcoal/40"
-                    }
-                  `}
+                  className="flex-1 bg-transparent py-2 text-sm placeholder:text-charcoal/40 focus:outline-none"
                 />
               </form>
             </Container>
           </div>
         )}
-
-
-        {/* DESKTOP CATEGORY NAV */}
-        <div className="hidden lg:block">
-          <CategoryNavbar />
-        </div>
-
-
-        {/* MEGA MENU */}
-        <AnimatePresence>
-          {megaMenuOpen && (
-            <div
-              onMouseEnter={() =>
-                setMegaMenuOpen(true)
-              }
-              onMouseLeave={() =>
-                setMegaMenuOpen(false)
-              }
-            >
-              <MegaMenu
-                categories={categories}
-                onNavigate={() =>
-                  setMegaMenuOpen(false)
-                }
-              />
-            </div>
-          )}
-        </AnimatePresence>
-
       </nav>
 
+      <CategoryNavbar />
 
-      {/* MOBILE MENU */}
-      <MobileMenu
-        open={mobileOpen}
-        onClose={() => setMobileOpen(false)}
-        categories={categories}
-        navLinks={NAV_LINKS}
-      />
-
+        <MobileMenu
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+          categories={categories}
+          navLinks={NAV_LINKS}
+        />
     </header>
   );
 }
