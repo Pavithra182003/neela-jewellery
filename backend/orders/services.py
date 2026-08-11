@@ -67,7 +67,7 @@ Neela Jewellery
         message,
         settings.DEFAULT_FROM_EMAIL,
         [order.user.email],
-        fail_silently=False,
+        fail_silently=True,
     )
 
 
@@ -99,7 +99,7 @@ Neela Jewellery
         message,
         settings.DEFAULT_FROM_EMAIL,
         [settings.OWNER_EMAIL],
-        fail_silently=False,
+        fail_silently=True,
     )
 
 def send_payment_received_email(order):
@@ -326,11 +326,24 @@ def create_order_from_cart(user, address_id, coupon_code=None, notes=None):
 
     cart.items.all().delete()
 
-    notify_order_placed(order)
-    send_customer_email(order)
-    send_owner_email(order)
+    try:
+        notify_order_placed(order)
+    except Exception as e:
+        print("Order notification failed:", e)
+
+    try:
+        send_customer_email(order)
+    except Exception as e:
+        print("Customer email failed:", e)
+
+    try:
+        send_owner_email(order)
+    except Exception as e:
+        print("Owner email failed:", e)
 
     return order
+
+    
 
 
 @transaction.atomic
