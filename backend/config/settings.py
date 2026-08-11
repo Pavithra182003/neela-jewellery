@@ -160,11 +160,11 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
-CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": env("CLOUDINARY_CLOUD_NAME"),
-    "API_KEY": env("CLOUDINARY_API_KEY"),
-    "API_SECRET": env("CLOUDINARY_API_SECRET"),
-}
+# CLOUDINARY_STORAGE = {
+#     "CLOUD_NAME": env("CLOUDINARY_CLOUD_NAME"),
+#     "API_KEY": env("CLOUDINARY_API_KEY"),
+#     "API_SECRET": env("CLOUDINARY_API_SECRET"),
+# }
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -208,12 +208,21 @@ SIMPLE_JWT = {
 # ------------------------------------------------------------------
 # CORS / CSRF
 # ------------------------------------------------------------------
-CORS_ALLOWED_ORIGINS = env(
-    "CORS_ALLOWED_ORIGINS", "http://localhost:5173,https://www.neelajewellers.com,https://neelajewellers.com"
-).split(",")
-CSRF_TRUSTED_ORIGINS = env(
-    "CSRF_TRUSTED_ORIGINS", "http://localhost:5173,https://www.neelajewellers.com,https://neelajewellers.com"
-).split(",")
+# ------------------------------------------------------------------
+# CORS / CSRF
+# ------------------------------------------------------------------
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "https://www.neelajewellers.com",
+    "https://neelajewellers.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "https://www.neelajewellers.com",
+    "https://neelajewellers.com",
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -241,9 +250,9 @@ OWNER_EMAIL = os.getenv("OWNER_EMAIL")
 # ------------------------------------------------------------------
 # RAZORPAY
 # ------------------------------------------------------------------
-RAZORPAY_KEY_ID = env("RAZORPAY_KEY_ID")
-RAZORPAY_KEY_SECRET = env("RAZORPAY_KEY_SECRET")
-RAZORPAY_WEBHOOK_SECRET = env("RAZORPAY_WEBHOOK_SECRET")
+# RAZORPAY_KEY_ID = env("RAZORPAY_KEY_ID")
+# RAZORPAY_KEY_SECRET = env("RAZORPAY_KEY_SECRET")
+# RAZORPAY_WEBHOOK_SECRET = env("RAZORPAY_WEBHOOK_SECRET")
 
 # ------------------------------------------------------------------
 # SECURITY (production hardening — active when DEBUG=False)
