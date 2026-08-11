@@ -52,7 +52,7 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = (
             "id",
-            "order_id",
+            
             "order_number",
             "customer_name",
             "product_name",
@@ -71,7 +71,7 @@ class OrderSerializer(serializers.ModelSerializer):
         return "-"
 class OrderDetailSerializer(serializers.ModelSerializer):
     """Full order representation for the order-details / confirmation page."""
-    order_id = serializers.CharField(read_only=True)
+   
     items = OrderItemSerializer(many=True, read_only=True)
     shipping_address = OrderAddressSerializer(read_only=True)
     coupon_code = serializers.CharField(source="coupon.code", read_only=True, default=None)
@@ -81,7 +81,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         model = Order
         fields = (
             "id",
-            "order_id",
+           
             "order_number",
             "status",
             "payment_status",
