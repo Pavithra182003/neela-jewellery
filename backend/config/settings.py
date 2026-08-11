@@ -30,10 +30,13 @@ def env(key, default=None, cast=str):
 # ------------------------------------------------------------------
 SECRET_KEY = env("DJANGO_SECRET_KEY", "unsafe-dev-key-change-me")
 DEBUG = env("DJANGO_DEBUG", False, bool)
-ALLOWED_HOSTS = env(
-    "DJANGO_ALLOWED_HOSTS",
-    "localhost,127.0.0.1,neela-jewellery.onrender.com,www.neelajewellers.com,neelajewellers.com"
-).split(",")
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "neela-jewellery.onrender.com",
+    "www.neelajewellers.com",
+    "neelajewellers.com",
+]
 # APPLICATIONS
 # ------------------------------------------------------------------
 INSTALLED_APPS = [
