@@ -326,20 +326,7 @@ def create_order_from_cart(user, address_id, coupon_code=None, notes=None):
 
     cart.items.all().delete()
 
-    try:
-        notify_order_placed(order)
-    except Exception as e:
-        print("Order notification failed:", e)
-
-    try:
-        send_customer_email(order)
-    except Exception as e:
-        print("Customer email failed:", e)
-
-    try:
-        send_owner_email(order)
-    except Exception as e:
-        print("Owner email failed:", e)
+   
 
     return order
 
