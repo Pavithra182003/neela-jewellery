@@ -10,6 +10,7 @@ from coupons.services import validate_coupon_for_user
 from notifications.services import notify_order_placed, notify_order_status_change
 from products.models import Product
 from users.models import Address
+from decimal import Decimal
 
 from .models import Order, OrderItem
 
@@ -26,9 +27,24 @@ CANCELLABLE_STATUSES = {Order.Status.PENDING, Order.Status.CONFIRMED, Order.Stat
 
 
 def _calculate_shipping(subtotal):
-    if subtotal >= FREE_SHIPPING_THRESHOLD:
-        return Decimal("0.00")
-    return STANDARD_SHIPPING_CHARGE
+    if subtotal < Decimal("99"):
+        shipping_charge = Decimal("49.00")
+
+    elif subtotal < Decimal("199"):
+        shipping_charge = Decimal("39.00")
+
+    elif subtotal < Decimal("299"):
+        shipping_charge = Decimal("29.00")
+
+    elif subtotal < Decimal("399"):
+        shipping_charge = Decimal("19.00")
+
+    elif subtotal < Decimal("499"):
+        shipping_charge = Decimal("9.00")
+
+    else:
+        shipping_charge = Decimal("0.00")
+    
 
 
 def _apply_coupon(coupon_code, subtotal, user):

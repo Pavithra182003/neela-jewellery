@@ -43,7 +43,7 @@ class OrderAddressSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    order_id = serializers.CharField(read_only=True)
+    
     total_items = serializers.IntegerField(read_only=True)
     product_name = serializers.SerializerMethodField()
     customer_name = serializers.CharField(source="shipping_address.full_name", read_only=True)
