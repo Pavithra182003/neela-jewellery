@@ -28,7 +28,7 @@ export default function ProductDetails() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-  const { cart, addToCart, updateItem } = useCart();
+  const { cart, addToCart, updateItem, refreshCart } = useCart();
   const { isWishlisted, toggle } = useWishlist();
 
   const [product, setProduct] = useState(null);
@@ -131,18 +131,19 @@ export default function ProductDetails() {
   }
 
   try {
-    // Check whether this product is already in the cart
-    const existingItem = cart?.items?.find(
+    // Get the latest cart from the server
+    const latestCart = await refreshCart();
+
+    const existingItem = latestCart?.items?.find(
       (item) => item.product?.id === product.id
     );
 
     if (existingItem) {
-      // Product already exists in cart.
-      // Set the cart quantity to the selected quantity
-      // instead of adding another item.
+      // Product is already in cart.
+      // Set quantity instead of adding another item.
       await updateItem(existingItem.id, quantity);
     } else {
-      // Product is not in cart, so add it.
+      // Product isn't in cart, so add it.
       await addToCart(product.id, quantity);
     }
 
@@ -151,7 +152,6 @@ export default function ProductDetails() {
     console.error("Buy Now Error:", error);
   }
 };
-
   const handleToggleWishlist = async () => {
     if (!isAuthenticated || wishlistBusy) return;
     setWishlistBusy(true);

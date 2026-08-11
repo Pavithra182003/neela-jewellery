@@ -18,6 +18,7 @@ export function CartProvider({ children }) {
     try {
       const data = await cartService.getCart();
       setCart(data);
+      return data;
     } finally {
       setLoading(false);
     }
