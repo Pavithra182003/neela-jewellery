@@ -145,7 +145,7 @@ Neela Jewellery Team
 """,
         settings.DEFAULT_FROM_EMAIL,
         [order.user.email],
-        fail_silently=False,
+        fail_silently=True,
     )
 
 def send_confirmed_email(order):
@@ -167,7 +167,7 @@ Neela Jewellery Team
 """,
         settings.DEFAULT_FROM_EMAIL,
         [order.user.email],
-        fail_silently=False,
+        fail_silently=True,
     )
 
 def send_processing_email(order):
@@ -185,7 +185,7 @@ Neela Jewellery Team
 """,
         settings.DEFAULT_FROM_EMAIL,
         [order.user.email],
-        fail_silently=False,
+        fail_silently=True,
     )
 
 def send_shipped_email(order):
@@ -207,7 +207,7 @@ Neela Jewellery Team
 """,
         settings.DEFAULT_FROM_EMAIL,
         [order.user.email],
-        fail_silently=False,
+        fail_silently=True,
     )
 
 def send_delivered_email(order):
@@ -229,7 +229,7 @@ Neela Jewellery Team
 """,
         settings.DEFAULT_FROM_EMAIL,
         [order.user.email],
-        fail_silently=False,
+        fail_silently=True,
     )
 
 def send_cancelled_email(order):
@@ -249,7 +249,7 @@ Neela Jewellery Team
 """,
         settings.DEFAULT_FROM_EMAIL,
         [order.user.email],
-        fail_silently=False,
+        fail_silently=True,
     )
 
 @transaction.atomic
