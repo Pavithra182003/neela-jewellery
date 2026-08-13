@@ -246,7 +246,7 @@ FRONTEND_URL = env("FRONTEND_URL", "http://localhost:5173")
 # EMAIL (Gmail SMTP)
 # ------------------------------------------------------------------
 
-
+RESEND_API_KEY = os.getenv("RESEND_API_KEY")
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 EMAIL_HOST = os.getenv("EMAIL_HOST")
