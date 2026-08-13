@@ -94,7 +94,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm text-cream/70">
               <li><Link to="/contact" className="hover:text-gold">Contact Us</Link></li>
               <li><Link to="/faq" className="hover:text-gold">FAQ</Link></li>
-              <li><Link to="/refund-policy" className="hover:text-gold">Refund Policy</Link></li>
+              {/*<li><Link to="/refund-policy" className="hover:text-gold">Refund Policy</Link></li>*/}
               <li><Link to="/account/orders" className="hover:text-gold">Track Order</Link></li>
             </ul>
           </div>

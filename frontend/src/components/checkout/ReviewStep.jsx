@@ -15,8 +15,33 @@ export default function ReviewStep({ cart, selectedAddressId, appliedCoupon, onA
     addressService.getAddress(selectedAddressId).then(setAddress).catch(() => setAddress(null));
   }, [selectedAddressId]);
 
-  const discount = appliedCoupon?.discount_amount || 0;
-  const estimatedTotal = Math.max(cart.subtotal - discount, 0);
+  const discount = Number(appliedCoupon?.discount_amount || 0);
+
+const taxableAmount = Math.max(
+  Number(cart.subtotal || 0) - discount,
+  0
+);
+
+// Shipping charges
+const shippingCharge =
+  taxableAmount < 99
+    ? 49
+    : taxableAmount < 199
+    ? 39
+    : taxableAmount < 299
+    ? 29
+    : taxableAmount < 399
+    ? 19
+    : taxableAmount < 499
+    ? 9
+    : 0;
+
+// GST – 3%
+const taxAmount = Number((taxableAmount * 0.03).toFixed(2));
+
+const estimatedTotal = Number(
+  (taxableAmount + shippingCharge + taxAmount).toFixed(2)
+);
 
   const handlePlaceOrder = async () => {
     setPlacing(true);
@@ -124,17 +149,24 @@ export default function ReviewStep({ cart, selectedAddressId, appliedCoupon, onA
               <span>-₹{discount}</span>
             </div>
           )}
-          <div className="flex justify-between text-charcoal/50">
-            <span>Shipping &amp; Tax</span>
-            <span>Calculated at checkout</span>
-          </div>
+          <div className="flex justify-between text-charcoal/70">
+          <span>Shipping</span>
+          <span>
+            {shippingCharge === 0 ? "FREE" : `₹${shippingCharge.toFixed(2)}`}
+          </span>
+        </div>
+
+        <div className="flex justify-between text-charcoal/70">
+          <span>GST (3%)</span>
+          <span>₹{taxAmount.toFixed(2)}</span>
+        </div>
         </div>
         <div className="mt-4 flex justify-between border-t border-gold/15 pt-4 font-display text-lg text-charcoal">
           <span>Est. Total</span>
           <span>₹{estimatedTotal}</span>
         </div>
         <p className="mt-2 text-[11px] text-charcoal/40">
-          Final shipping and tax are calculated when your order is placed.
+           Shipping and GST are included in your estimated total
         </p>
         <div className="mt-6">
         <h3 className="mb-3 font-medium text-charcoal">
