@@ -123,6 +123,10 @@ class OrderStatusUpdateView(APIView):
 
         print("REQUEST DATA:", request.data)
 
+        # Store the old values BEFORE updating
+        old_status = order.status
+        old_payment_status = order.payment_status
+
         serializer = OrderStatusUpdateSerializer(
             order,
             data=request.data,
@@ -135,38 +139,77 @@ class OrderStatusUpdateView(APIView):
 
         serializer.save()
 
-        print("AFTER SAVE:", order.payment_status)
-        # Payment Approved
-        if (
-            order.payment_status == Order.PaymentStatus.PAID
-            and order.status == Order.Status.PENDING
-        ):
-            order.status = Order.Status.CONFIRMED
-            order.save(update_fields=["status"])
+        print("OLD STATUS:", old_status)
+        print("NEW STATUS:", order.status)
+        print("OLD PAYMENT STATUS:", old_payment_status)
+        print("NEW PAYMENT STATUS:", order.payment_status)
 
+        # ------------------------------------------------------------
+        # PAYMENT RECEIVED
+        # ------------------------------------------------------------
+        # Send payment email only when payment changes to PAID.
+        if (
+            old_payment_status != Order.PaymentStatus.PAID
+            and order.payment_status == Order.PaymentStatus.PAID
+        ):
             send_payment_received_email(order)
+
+        # ------------------------------------------------------------
+        # CONFIRMED
+        # ------------------------------------------------------------
+        # Send confirmation email whenever the order changes to CONFIRMED.
+        if (
+            old_status != Order.Status.CONFIRMED
+            and order.status == Order.Status.CONFIRMED
+        ):
             send_confirmed_email(order)
 
-        # Processing
-        elif order.status == Order.Status.PROCESSING:
+        # ------------------------------------------------------------
+        # PROCESSING
+        # ------------------------------------------------------------
+        elif (
+            old_status != Order.Status.PROCESSING
+            and order.status == Order.Status.PROCESSING
+        ):
             send_processing_email(order)
 
-        # Shipped
-        elif order.status == Order.Status.SHIPPED:
+        # ------------------------------------------------------------
+        # SHIPPED
+        # ------------------------------------------------------------
+        elif (
+            old_status != Order.Status.SHIPPED
+            and order.status == Order.Status.SHIPPED
+        ):
             send_shipped_email(order)
 
-        # Delivered
-        elif order.status == Order.Status.DELIVERED:
+        # ------------------------------------------------------------
+        # DELIVERED
+        # ------------------------------------------------------------
+        elif (
+            old_status != Order.Status.DELIVERED
+            and order.status == Order.Status.DELIVERED
+        ):
             send_delivered_email(order)
 
-        # Cancelled
-        elif order.status == Order.Status.CANCELLED:
+        # ------------------------------------------------------------
+        # CANCELLED
+        # ------------------------------------------------------------
+        elif (
+            old_status != Order.Status.CANCELLED
+            and order.status == Order.Status.CANCELLED
+        ):
             send_cancelled_email(order)
 
+        # ------------------------------------------------------------
+        # NOTIFICATION
+        # ------------------------------------------------------------
         notify_order_status_change(order)
 
         return Response(
-            OrderDetailSerializer(order, context={"request": request}).data
+            OrderDetailSerializer(
+                order,
+                context={"request": request}
+            ).data
         )
 class AdminOrderSummaryView(APIView):
     """
