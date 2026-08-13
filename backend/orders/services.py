@@ -28,24 +28,22 @@ CANCELLABLE_STATUSES = {Order.Status.PENDING, Order.Status.CONFIRMED, Order.Stat
 
 def _calculate_shipping(subtotal):
     if subtotal < Decimal("99"):
-        shipping_charge = Decimal("49.00")
+        return Decimal("49.00")
 
     elif subtotal < Decimal("199"):
-        shipping_charge = Decimal("39.00")
+        return Decimal("39.00")
 
     elif subtotal < Decimal("299"):
-        shipping_charge = Decimal("29.00")
+        return Decimal("29.00")
 
     elif subtotal < Decimal("399"):
-        shipping_charge = Decimal("19.00")
+        return Decimal("19.00")
 
     elif subtotal < Decimal("499"):
-        shipping_charge = Decimal("9.00")
+        return Decimal("9.00")
 
     else:
-        shipping_charge = Decimal("0.00")
-    
-
+        return Decimal("0.00")
 
 def _apply_coupon(coupon_code, subtotal, user):
     """Thin wrapper around coupons.services.validate_coupon_for_user —
