@@ -53,7 +53,7 @@ const estimatedTotal = Number(
         payment_method: paymentMethod,
       });
       if (paymentMethod === "whatsapp") {
-        const phone = "919398865029"; 
+        const phone = "917794029720"; 
 
         const message = `
       Hello Neela Jewellery,

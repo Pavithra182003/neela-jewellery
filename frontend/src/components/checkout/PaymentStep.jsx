@@ -11,7 +11,7 @@ export default function PaymentStep({ order, onPaymentSuccess }) {
       return;
     }
 
-    const phoneNumber = "9398865029"; 
+    const phoneNumber = "7794029720"; 
 
     const message = `
 🛍️ *New Order - Neela Jewellery*
